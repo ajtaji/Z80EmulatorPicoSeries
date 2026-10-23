@@ -1,0 +1,5 @@
+* text=auto
+*.sh text eol=lf
+*.com binary
+*.bin binary
+*.uf2 binary

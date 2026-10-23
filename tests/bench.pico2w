@@ -1,0 +1,17 @@
+; Z80 instruction-mix benchmarks on the Pico 2 W.
+#CLOCK_KHZ = 150000
+#Z80_TIMED = 0
+#Z80_ASM_TAIL = 1
+#Z80_SHARED_TAIL = 0
+#Z80_MEM_HOOKS = 0
+#Z80_Q = 1
+#Z80_TRACK_R = 1
+EnableExplicit
+XIncludeFile "RP2350/Lib/clocks.pico2"
+XIncludeFile "RP2350/Lib/timer.pico2"
+XIncludeFile "RP2350/Lib/uart.pico2"
+XIncludeFile "RP2350/Lib/safety.pico2"
+XIncludeFile "RP2350/Lib/usb_serial.pico2"
+XIncludeFile "../src/z80.pico2"
+XIncludeFile "io.pico2"
+XIncludeFile "bench_body.pico2"

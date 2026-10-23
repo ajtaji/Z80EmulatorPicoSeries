@@ -1,0 +1,76 @@
+; USB serial output helpers shared by the test and benchmark programs.
+Global IoWaitStart.i
+Procedure PutC(c.i)
+  While UsbSerialWrite(c) = 0
+    UsbSerialFlush() : UsbSerialTask() : SafetyPet()
+  Wend
+EndProcedure
+Procedure Say(*text.i)
+  Protected p.i, c.i
+  p = *text
+  c = PeekA(p) & 255
+  While c
+    PutC(c)
+    p = p + 1
+    c = PeekA(p) & 255
+  Wend
+EndProcedure
+Procedure Num(v.i)
+  Protected d.i
+  If v < 0
+    PutC(45)
+    v = 0 - v
+  EndIf
+  d = 1
+  While v / d >= 10
+    d = d * 10
+  Wend
+  While d > 0
+    PutC(48 + (v / d) % 10)
+    d = d / 10
+  Wend
+EndProcedure
+Procedure Hex(v.i, digits.i)
+  Protected i.i, n.i
+  For i = digits - 1 To 0 Step -1
+    n = (v >> (i * 4)) & 15
+    If n < 10
+      PutC(48 + n)
+    Else
+      PutC(55 + n)
+    EndIf
+  Next
+EndProcedure
+Procedure Eol()
+  PutC(13) : PutC(10)
+  UsbSerialFlush() : UsbSerialTask()
+EndProcedure
+Procedure WaitUs(us.i)
+  Protected t.i
+  t = Micros()
+  While Micros() - t < us
+    UsbSerialTask() : SafetyPet()
+  Wend
+EndProcedure
+; Wait up to 30 s for a terminal, then a moment for it to settle.
+Procedure WaitHost()
+  IoWaitStart = Micros()
+  While UsbSerialReady() = 0
+    UsbSerialTask() : SafetyPet()
+    If Micros() - IoWaitStart > 30000000
+      Break
+    EndIf
+  Wend
+  WaitUs(200000)
+EndProcedure
+; count/us scaled by 1e6 without overflowing 32 bits.
+Procedure.i Rate(count.i, us.i)
+  Protected q.i, remainder.i, digit.i
+  q = count / us : remainder = count % us
+  For digit = 1 To 6
+    remainder = remainder * 10
+    q = q * 10 + remainder / us
+    remainder = remainder % us
+  Next
+  ProcedureReturn q
+EndProcedure

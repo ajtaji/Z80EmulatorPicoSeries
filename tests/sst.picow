@@ -1,0 +1,20 @@
+; SingleStepTests Z80 vectors on the Pico W, one batch per build (#SST_BATCH).
+#CLOCK_KHZ = 200000
+#Z80_TIMED = 1
+#Z80_ASM_TAIL = 1
+#Z80_SHARED_TAIL = 0
+#Z80_MEM_HOOKS = 0
+#Z80_Q = 1
+#Z80_TRACK_R = 1
+#SST_BATCH = 1
+#SST_SABOTAGE = 0
+EnableExplicit
+XIncludeFile "RP2040/Lib/clocks.pico"
+XIncludeFile "RP2040/Lib/timer.pico"
+XIncludeFile "RP2040/Lib/uart.pico"
+XIncludeFile "RP2040/Lib/safety.pico"
+XIncludeFile "RP2040/Lib/usb_serial.pico"
+XIncludeFile "../src/z80.pico"
+XIncludeFile "io.pico"
+XIncludeFile "sst_batch1.pico"
+XIncludeFile "sst_body.pico"

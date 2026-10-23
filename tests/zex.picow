@@ -1,0 +1,24 @@
+; ZEXDOC / ZEXALL under a minimal CP/M BDOS (functions 2 and 9) on the Pico W.
+; #ZEX_ALL selects the exerciser; #ZEX_FIRST/#ZEX_LAST select tests
+; (0-based, last exclusive; 67 tests in each).
+#CLOCK_KHZ = 200000
+#Z80_TIMED = 0
+#Z80_ASM_TAIL = 1
+#Z80_SHARED_TAIL = 0
+#Z80_MEM_HOOKS = 0
+#Z80_Q = 1
+#Z80_TRACK_R = 1
+#ZEX_ALL = 0
+#ZEX_FIRST = 0
+#ZEX_LAST = 67
+#WINDOW = 100000
+EnableExplicit
+XIncludeFile "RP2040/Lib/clocks.pico"
+XIncludeFile "RP2040/Lib/timer.pico"
+XIncludeFile "RP2040/Lib/uart.pico"
+XIncludeFile "RP2040/Lib/safety.pico"
+XIncludeFile "RP2040/Lib/usb_serial.pico"
+XIncludeFile "../src/z80.pico"
+XIncludeFile "io.pico"
+XIncludeFile "zex_data.pico"
+XIncludeFile "zex_body.pico"

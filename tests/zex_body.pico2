@@ -1,0 +1,134 @@
+; Shared by zex.picow and zex.pico2w.
+Global ZexOk.i, ZexErr.i, ZexTotal.i, ZexStart.i, ZexElapsed.i, ZexLen.i, ZexI.i
+Global ZexTests.i, ZexCount.i, ZexMillions.i, ZexLast.i
+
+Procedure.i Z80PortIn(port.i)
+  ProcedureReturn $FF
+EndProcedure
+
+; BDOS stub: OUT (0),A at $FE00 lands here with C = the function.
+Procedure Z80PortOut(port.i, value.i)
+  Protected p.i, c.i, n.i
+  If (port & 255) <> 0
+    ProcedureReturn
+  EndIf
+  c = PeekA(@Z80BC)
+  If c = 2
+    PutC(PeekA(@Z80DE))
+  ElseIf c = 9
+    p = Z80DE
+    If Z80Mem(p) = 32 And Z80Mem((p + 1) & $FFFF) = 32
+      If Z80Mem((p + 2) & $FFFF) = 79
+        ZexOk = ZexOk + 1
+      ElseIf Z80Mem((p + 2) & $FFFF) = 69
+        ZexErr = ZexErr + 1
+      EndIf
+      ; how long this test took, before its verdict
+      Say(" [") : Num((Micros() - ZexLast) / 1000) : Say(" ms]")
+      ZexLast = Micros()
+    EndIf
+    n = 0
+    While Z80Mem(p) <> 36 And n < 200
+      PutC(Z80Mem(p))
+      p = (p + 1) & $FFFF
+      n = n + 1
+    Wend
+    UsbSerialFlush()
+  EndIf
+EndProcedure
+
+; (millions * 1e6 + units) * 1000 / ms, in 32-bit arithmetic.
+Procedure.i BigRate(millions.i, units.i, ms.i)
+  Protected a.i, b.i, acc.i, frac.i, i.i
+  If ms <= 0
+    ProcedureReturn 0
+  EndIf
+  a = 1000000000 / ms : b = 1000000000 % ms
+  acc = millions * a
+  frac = 0
+  For i = 1 To millions
+    frac = frac + b
+    While frac >= ms
+      frac = frac - ms
+      acc = acc + 1
+    Wend
+  Next
+  ProcedureReturn acc + (units * 1000) / ms
+EndProcedure
+
+Procedure Main()
+  Protected word.i, start.i
+  SafetyBoot()
+  ClockInitKhz(#CLOCK_KHZ)
+  TimerInit()
+  UsbSerialInit()
+  WaitHost()
+  Say("Z80 PureMetal clk_sys kHz=") : Num(ClockSysKhz()) : Eol()
+  Z80Reset()
+  For ZexI = 0 To 65535
+    Z80Mem(ZexI) = 0
+  Next
+  CompilerIf #ZEX_ALL = 1
+    ZexLen = ?ZexAllEnd - ?ZexAll
+    For ZexI = 0 To ZexLen - 1
+      Z80Mem($100 + ZexI) = PeekA(?ZexAll + ZexI) & 255
+    Next
+    Say("ZEXALL")
+  CompilerElse
+    ZexLen = ?ZexDocEnd - ?ZexDoc
+    For ZexI = 0 To ZexLen - 1
+      Z80Mem($100 + ZexI) = PeekA(?ZexDoc + ZexI) & 255
+    Next
+    Say("ZEXDOC")
+  CompilerEndIf
+  Say(" bytes=") : Num(ZexLen) : Eol()
+  ; CP/M page zero: warm boot is HALT, BDOS at $FE00 is OUT (0),A / RET.
+  Z80Mem(0) = $76
+  Z80Mem(5) = $C3 : Z80Mem(6) = $00 : Z80Mem(7) = $FE
+  Z80Mem($FE00) = $D3 : Z80Mem($FE01) = $00 : Z80Mem($FE02) = $C9
+  ; Select the tests: the table address follows "ld hl," at start + 12.
+  start = Z80Mem($101) | (Z80Mem($102) << 8)
+  If Z80Mem(start + 12) <> $21
+    Say("ZEX layout not recognised FAIL") : Eol()
+    ProcedureReturn
+  EndIf
+  ZexTests = Z80Mem(start + 13) | (Z80Mem(start + 14) << 8)
+  ZexCount = 0
+  While (Z80Mem(ZexTests + ZexCount * 2) | Z80Mem(ZexTests + ZexCount * 2 + 1)) <> 0
+    ZexCount = ZexCount + 1
+  Wend
+  Say("tests in table=") : Num(ZexCount) : Say(" running ") : Num(#ZEX_FIRST) : Say("..") : Num(#ZEX_LAST - 1) : Eol()
+  word = ZexTests + #ZEX_FIRST * 2
+  Z80Mem(start + 13) = word & 255 : Z80Mem(start + 14) = word >> 8
+  If #ZEX_LAST < ZexCount
+    Z80Mem(ZexTests + #ZEX_LAST * 2) = 0 : Z80Mem(ZexTests + #ZEX_LAST * 2 + 1) = 0
+  EndIf
+  Z80PC = $100
+  ZexTotal = 0 : ZexMillions = 0
+  ZexStart = Micros()
+  ZexLast = ZexStart
+  Repeat
+    ZexTotal = ZexTotal + Z80Run(#WINDOW)
+    If ZexTotal >= 1000000
+      ZexTotal = ZexTotal - 1000000
+      ZexMillions = ZexMillions + 1
+    EndIf
+    UsbSerialTask() : SafetyPet()
+  Until Z80Halted <> 0 Or Z80Stopped <> 0
+  ZexElapsed = Micros() - ZexStart
+  Eol()
+  Say("instructions=") : Num(ZexMillions) : Say(" million + ") : Num(ZexTotal)
+  Say(" us=") : Num(ZexElapsed)
+  Say(" instructions/s=") : Num(BigRate(ZexMillions, ZexTotal, ZexElapsed / 1000)) : Eol()
+  Say("halt PC=") : Hex(Z80PC, 4) : Say(" stopped=") : Num(Z80Stopped) : Eol()
+  Say("ZEX ok=") : Num(ZexOk) : Say(" errors=") : Num(ZexErr)
+  If ZexErr = 0 And ZexOk = (#ZEX_LAST - #ZEX_FIRST) And Z80PC = 1 And Z80Stopped = 0
+    Say(" PASS")
+  Else
+    Say(" FAIL")
+  EndIf
+  Eol()
+  Repeat
+    WaitUs(1000000)
+  ForEver
+EndProcedure

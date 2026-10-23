@@ -1,0 +1,152 @@
+; Runs one batch of SingleStepTests vectors: each sets the whole CPU state
+; and memory, runs ONE instruction with Z80Run(1) in a timed build, and
+; compares every register, R, WZ, Q, IFFs, IM, memory, port traffic and the
+; T-state count.
+Global SstP.i, SstEnd.i, SstN.i, SstFail.i, SstShown.i, SstI.i, SstNRam.i, SstRam.i
+Global SstNPorts.i, SstPortP.i, SstPortI.i, SstPortBad.i, SstCycles.i, SstGot.i, SstOp.i
+Global SstBadField.i, SstExp.i, SstHave.i, SstStart.i, SstMem.i
+
+Procedure.i SstB(off.i)
+  ProcedureReturn PeekA(SstP + off) & 255
+EndProcedure
+Procedure.i SstW(off.i)
+  ProcedureReturn (PeekA(SstP + off) & 255) | ((PeekA(SstP + off + 1) & 255) << 8)
+EndProcedure
+
+; Port traffic must match the vector, in order.
+Procedure.i Z80PortIn(port.i)
+  Protected q.i
+  If SstPortI < SstNPorts
+    q = SstPortP + SstPortI * 4
+    If (PeekA(q + 3) & 255) = 1 And port = ((PeekA(q) & 255) | ((PeekA(q + 1) & 255) << 8))
+      SstPortI = SstPortI + 1
+      ProcedureReturn PeekA(q + 2) & 255
+    EndIf
+  EndIf
+  SstPortBad = 1
+  ProcedureReturn $FF
+EndProcedure
+Procedure Z80PortOut(port.i, value.i)
+  Protected q.i
+  If SstPortI < SstNPorts
+    q = SstPortP + SstPortI * 4
+    If (PeekA(q + 3) & 255) = 2 And port = ((PeekA(q) & 255) | ((PeekA(q + 1) & 255) << 8)) And value = (PeekA(q + 2) & 255)
+      SstPortI = SstPortI + 1
+      ProcedureReturn
+    EndIf
+  EndIf
+  SstPortBad = 1
+EndProcedure
+
+Procedure SstCheck(field.i, expected.i, have.i)
+  If SstBadField = 0 And expected <> have
+    SstBadField = field : SstExp = expected : SstHave = have
+  EndIf
+EndProcedure
+
+Procedure SstRun()
+  Protected fin.i, k.i, a.i, fl.i
+  SstP = ?SstVectors : SstEnd = ?SstVectorsEnd
+  SstN = 0 : SstFail = 0 : SstShown = 0
+  While SstP < SstEnd
+    Z80Reset()
+    Z80PC = SstW(0) : Z80SP = SstW(2)
+    Z80A = SstW(4) >> 8 : Z80F = SstW(4) & 255
+    Z80BC = SstW(6) : Z80DE = SstW(8) : Z80HL = SstW(10)
+    Z80AF2 = SstW(12) : Z80BC2 = SstW(14) : Z80DE2 = SstW(16) : Z80HL2 = SstW(18)
+    Z80IX = SstW(20) : Z80IY = SstW(22) : Z80WZ = SstW(24)
+    Z80I = SstB(26) : Z80SetR(SstB(27)) : Z80IM = SstB(28)
+    fl = SstB(29)
+    Z80IFF1 = fl & 1 : Z80IFF2 = (fl >> 1) & 1 : Z80QLast = (fl >> 3) & 1
+    SstNRam = SstB(30) : SstRam = SstP + 31
+    For k = 0 To SstNRam - 1
+      a = (PeekA(SstRam + k * 4) & 255) | ((PeekA(SstRam + k * 4 + 1) & 255) << 8)
+      Z80Mem(a) = PeekA(SstRam + k * 4 + 2) & 255
+    Next
+    SstOp = (Z80Mem(Z80PC) << 24) | (Z80Mem((Z80PC + 1) & $FFFF) << 16) | (Z80Mem((Z80PC + 2) & $FFFF) << 8) | Z80Mem((Z80PC + 3) & $FFFF)
+    SstPortP = SstRam + SstNRam * 4 + 1
+    SstNPorts = PeekA(SstPortP - 1) & 255
+    SstPortI = 0 : SstPortBad = 0
+    fin = SstPortP + SstNPorts * 4
+    SstGot = Z80Run(1)
+    SstBadField = 0
+    CompilerIf #SST_SABOTAGE = 1
+      ; Planted fault: the checker must report vector 100's carry flag.
+      If SstN = 100
+        Z80F = Z80F ! 1
+      EndIf
+    CompilerEndIf
+    SstMem = SstP
+    SstP = fin
+    SstCheck(1, SstW(0), Z80PC)
+    SstCheck(2, SstW(2), Z80SP)
+    SstCheck(3, SstW(4) >> 8, Z80A)
+    SstCheck(4, SstW(4) & 255, Z80F)
+    SstCheck(5, SstW(6), Z80BC)
+    SstCheck(6, SstW(8), Z80DE)
+    SstCheck(7, SstW(10), Z80HL)
+    SstCheck(8, SstW(12), Z80AF2)
+    SstCheck(9, SstW(14), Z80BC2)
+    SstCheck(10, SstW(16), Z80DE2)
+    SstCheck(11, SstW(18), Z80HL2)
+    SstCheck(12, SstW(20), Z80IX)
+    SstCheck(13, SstW(22), Z80IY)
+    SstCheck(14, SstW(24), Z80WZ)
+    SstCheck(15, SstB(26), Z80I)
+    SstCheck(16, SstB(27), Z80GetR())
+    SstCheck(17, SstB(28), Z80IM)
+    SstCheck(18, SstB(29), Z80IFF1 | (Z80IFF2 << 1))
+    If Z80QLast <> 0
+      SstCheck(19, SstB(30), Z80F)
+    Else
+      SstCheck(19, SstB(30), 0)
+    EndIf
+    CompilerIf #Z80_TIMED = 1
+      SstCheck(20, SstB(31), SstGot)
+    CompilerElse
+      SstCheck(20, 1, SstGot)
+    CompilerEndIf
+    SstCheck(21, 0, SstPortBad | (SstNPorts - SstPortI))
+    For k = 0 To SstNRam - 1
+      a = (PeekA(SstRam + k * 4) & 255) | ((PeekA(SstRam + k * 4 + 1) & 255) << 8)
+      SstCheck(22, (PeekA(SstRam + k * 4 + 3) & 255) | (a << 8), Z80Mem(a) | (a << 8))
+      Z80Mem(a) = 0
+    Next
+    SstP = SstP + 32
+    SstN = SstN + 1
+    If SstBadField <> 0
+      SstFail = SstFail + 1
+      If SstShown < 40
+        SstShown = SstShown + 1
+        Say("vector ") : Num(SstN - 1) : Say(" op ") : Hex(SstOp, 8)
+        Say(" field ") : Num(SstBadField) : Say(" expected ") : Hex(SstExp, 4) : Say(" got ") : Hex(SstHave, 4) : Eol()
+      EndIf
+    EndIf
+    If (SstN & 63) = 0
+      UsbSerialTask() : SafetyPet()
+    EndIf
+  Wend
+EndProcedure
+
+Procedure Main()
+  SafetyBoot()
+  ClockInitKhz(#CLOCK_KHZ)
+  TimerInit()
+  UsbSerialInit()
+  WaitHost()
+  Say("Z80 SingleStepTests batch ") : Num(#SST_BATCH) : Say(" timed=") : Num(#Z80_TIMED) : Say(" shared=") : Num(#Z80_SHARED_TAIL) : Say(" sabotage=") : Num(#SST_SABOTAGE) : Say(" clk_sys kHz=") : Num(ClockSysKhz()) : Eol()
+  Say("fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory") : Eol()
+  SstStart = Micros()
+  SstRun()
+  Say("SST batch ") : Num(#SST_BATCH) : Say(" vectors=") : Num(SstN) : Say(" failures=") : Num(SstFail)
+  Say(" us=") : Num(Micros() - SstStart)
+  If SstFail = 0 And SstN = #SST_BATCH_COUNT
+    Say(" PASS")
+  Else
+    Say(" FAIL")
+  EndIf
+  Eol()
+  Repeat
+    WaitUs(1000000)
+  ForEver
+EndProcedure

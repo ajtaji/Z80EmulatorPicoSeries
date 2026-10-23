@@ -1,0 +1,17 @@
+; Z80 instruction-mix benchmarks on the Pico W.
+#CLOCK_KHZ = 200000
+#Z80_TIMED = 0
+#Z80_ASM_TAIL = 1
+#Z80_SHARED_TAIL = 0
+#Z80_MEM_HOOKS = 0
+#Z80_Q = 1
+#Z80_TRACK_R = 1
+EnableExplicit
+XIncludeFile "RP2040/Lib/clocks.pico"
+XIncludeFile "RP2040/Lib/timer.pico"
+XIncludeFile "RP2040/Lib/uart.pico"
+XIncludeFile "RP2040/Lib/safety.pico"
+XIncludeFile "RP2040/Lib/usb_serial.pico"
+XIncludeFile "../src/z80.pico"
+XIncludeFile "io.pico"
+XIncludeFile "bench_body.pico"

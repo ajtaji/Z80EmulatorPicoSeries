@@ -1,0 +1,183 @@
+; API and interrupt checks: IM 0/1/2, NMI/RETN, the EI delay (including a
+; window that ends right after EI), HALT and its wake-up, run budgets, R
+; across windows, memory hooks and port hooks. Shared by the timed and
+; untimed builds (#Z80_TIMED) and both tails.
+Global ApN.i, ApFail.i, ApHookRd.i, ApHookWr.i, ApHookAddr.i, ApHookVal.i
+Global ApPortOutP.i, ApPortOutV.i, ApPortInP.i, ApK.i, ApUsed.i
+
+Procedure.i Z80PortIn(port.i)
+  ApPortInP = port
+  ProcedureReturn $5A
+EndProcedure
+Procedure Z80PortOut(port.i, value.i)
+  ApPortOutP = port : ApPortOutV = value
+EndProcedure
+ProcedureRAM.i Z80MemRead(addr.i)
+  ApHookRd = ApHookRd + 1 : ApHookAddr = addr
+  ProcedureReturn $C3
+EndProcedure
+ProcedureRAM Z80MemWrite(addr.i, value.i)
+  ApHookWr = ApHookWr + 1 : ApHookAddr = addr : ApHookVal = value
+EndProcedure
+
+Procedure ApCheck(*name.i, ok.i)
+  ApN = ApN + 1
+  If ok = 0
+    ApFail = ApFail + 1
+    Say("API check FAIL: ") : Say(*name) : Say(" PC=") : Hex(Z80PC, 4) : Say(" SP=") : Hex(Z80SP, 4)
+    Say(" A=") : Hex(Z80A, 2) : Say(" halted=") : Num(Z80Halted) : Say(" stopped=") : Num(Z80Stopped) : Eol()
+  EndIf
+EndProcedure
+
+; One budget unit per instruction (untimed) or T-states (timed).
+Procedure.i ApUnits(insns.i, tstates.i)
+  CompilerIf #Z80_TIMED = 1
+    ProcedureReturn tstates
+  CompilerElse
+    ProcedureReturn insns
+  CompilerEndIf
+EndProcedure
+
+Procedure ApFresh()
+  Protected k.i
+  Z80Reset()
+  For k = 0 To 65535
+    Z80Mem(k) = 0
+  Next
+  CompilerIf #Z80_MEM_HOOKS = 1
+    For k = 0 To 255
+      Z80PageRd(k) = 0 : Z80PageWr(k) = 0
+    Next
+  CompilerEndIf
+  Z80SP = $F000
+EndProcedure
+
+Procedure.i ApWord(a.i)
+  ProcedureReturn Z80Mem(a) | (Z80Mem((a + 1) & $FFFF) << 8)
+EndProcedure
+
+Procedure ApRun()
+  ; ---- budget: NOPs
+  ApFresh()
+  ApUsed = Z80Run(ApUnits(10, 40))
+  ApCheck("budget NOPs", Bool(ApUsed = ApUnits(10, 40) And Z80PC = 10))
+  CompilerIf #Z80_TIMED = 1
+    ; LD BC,nn is 10 T: a 15 T budget runs two of them (20 T, 5 over)
+    ApFresh()
+    For ApK = 0 To 8 Step 3
+      Z80Mem(ApK) = 1
+    Next
+    ApUsed = Z80Run(15)
+    ApCheck("timed overshoot", Bool(ApUsed = 20 And Z80PC = 6 And Z80TStates = 20))
+  CompilerEndIf
+  ; ---- R across windows: 300 NOPs in three windows, then LD A,R
+  ApFresh()
+  Z80Mem(300) = $ED : Z80Mem(301) = $5F
+  Z80Run(ApUnits(100, 400)) : Z80Run(ApUnits(100, 400)) : Z80Run(ApUnits(101, 409))
+  ApCheck("R across windows", Bool(Z80A = (302 & 127) And Z80PC = 302))
+  ; ---- IM 1: EI / JR $ ; request held, accepted after the EI delay
+  ApFresh()
+  Z80Mem(0) = $FB : Z80Mem(1) = $18 : Z80Mem(2) = $FE        ; EI / JR $
+  Z80Mem($38) = $3C : Z80Mem($39) = $FB : Z80Mem($3A) = $ED : Z80Mem($3B) = $4D   ; INC A / EI / RETI
+  Z80IM = 1 : Z80A = 0
+  Z80Run(ApUnits(5, 40))
+  Z80IntRequest($FF)
+  Z80Run(ApUnits(20, 200))
+  ApCheck("IM 1 accepted once", Bool(Z80A = 1 And Z80IntLine = 0 And Z80PC = 1))
+  ; ---- EI delay: request pending before EI; one more instruction runs
+  ApFresh()
+  Z80Mem(0) = $FB : Z80Mem(1) = $3E : Z80Mem(2) = $11 : Z80Mem(3) = $3E : Z80Mem(4) = $22  ; EI / LD A,$11 / LD A,$22
+  Z80IM = 1
+  Z80IntRequest($FF)
+  Z80Run(ApUnits(3, 11 + 13 + 4))
+  ApCheck("EI delay", Bool(Z80A = $11 And ApWord(Z80SP) = 3 And Z80PC = $39 And Z80IFF1 = 0))
+  ; ---- EI as the last instruction of a window: the shadow carries over
+  ApFresh()
+  Z80Mem(0) = $FB : Z80Mem(1) = $3E : Z80Mem(2) = $11       ; EI / LD A,$11
+  Z80IM = 1
+  Z80IntRequest($FF)
+  Z80Run(ApUnits(1, 4))
+  ApCheck("EI at window end not yet accepted", Bool(Z80PC = 1 And Z80IntLine = 1))
+  Z80Run(ApUnits(2, 7 + 13))
+  ApCheck("EI shadow across windows", Bool(Z80A = $11 And ApWord(Z80SP) = 3 And Z80PC = ApUnits($39, $38)))
+  ; ---- IM 2 with I = $12, bus byte $34: vector at $1234 -> $4567
+  ApFresh()
+  Z80Mem($1234) = $67 : Z80Mem($1235) = $45
+  Z80IM = 2 : Z80I = $12 : Z80IFF1 = 1 : Z80IFF2 = 1 : Z80PC = $200
+  Z80IntRequest($34)
+  ApUsed = Z80Run(ApUnits(1, 19))
+  ApCheck("IM 2 vector", Bool(Z80PC = ApUnits($4568, $4567) And ApWord(Z80SP) = $200 And Z80IFF1 = 0))
+  ; ---- IM 0 with RST 28h, then IM 0 with a non-RST byte stops loudly
+  ApFresh()
+  Z80IM = 0 : Z80IFF1 = 1 : Z80PC = $300
+  Z80IntRequest($EF)
+  Z80Run(ApUnits(1, 13 + 4))
+  ApCheck("IM 0 RST 28h", Bool(Z80PC = $29 And ApWord(Z80SP) = $300))
+  ApFresh()
+  Z80IM = 0 : Z80IFF1 = 1 : Z80PC = $300
+  Z80IntRequest($00)
+  ApUsed = Z80Run(ApUnits(5, 20))
+  ApCheck("IM 0 non-RST stops with error 2", Bool(Z80Stopped = 1 And Z80Error = 2 And ApUsed = 0 And Z80PC = $300))
+  ; ---- NMI: to $66, IFF2 keeps IFF1, RETN restores
+  ApFresh()
+  Z80Mem($67) = $ED : Z80Mem($68) = $45                       ; NOP / RETN
+  Z80IFF1 = 1 : Z80IFF2 = 1 : Z80PC = $400
+  Z80NmiRequest()
+  Z80Run(ApUnits(1, 11 + 4))
+  ApCheck("NMI entry", Bool(Z80PC = $67 And ApWord(Z80SP) = $400))
+  ApCheck("NMI IFF", Bool(Z80IFF1 = 0 And Z80IFF2 = 1))
+  Z80Run(ApUnits(1, 14))
+  ApCheck("RETN", Bool(Z80PC = $400 And Z80IFF1 = 1))
+  ; ---- HALT: uses the whole budget, wakes on an interrupt
+  ApFresh()
+  Z80Mem(0) = $FB : Z80Mem(1) = $76 : Z80Mem(2) = $3E : Z80Mem(3) = $77   ; EI / HALT / LD A,$77
+  Z80Mem($38) = $ED : Z80Mem($39) = $4D                       ; RETI
+  Z80IM = 1
+  ApUsed = Z80Run(ApUnits(50, 400))
+  ApCheck("HALT consumes the budget", Bool(Z80Halted = 1 And Z80PC = 2 And ApUsed = ApUnits(50, 400)))
+  Z80IntRequest($FF)
+  Z80Run(ApUnits(2, 13 + 14 + 7))
+  ApCheck("HALT wakes, returns after HALT", Bool(Z80Halted = 0 And Z80A = $77 And Z80PC = 4))
+  ; ---- ports: OUT (n),A and IN A,(n) put A on the high byte
+  ApFresh()
+  Z80Mem(0) = $3E : Z80Mem(1) = $12 : Z80Mem(2) = $D3 : Z80Mem(3) = $34   ; LD A,$12 / OUT ($34),A
+  Z80Mem(4) = $DB : Z80Mem(5) = $56                                       ; IN A,($56)
+  Z80Mem(6) = $01 : Z80Mem(7) = $78 : Z80Mem(8) = $9A : Z80Mem(9) = $ED : Z80Mem(10) = $79  ; LD BC,$9A78 / OUT (C),A
+  Z80Run(ApUnits(5, 7 + 11 + 11 + 10 + 12))
+  ApCheck("IN A,(n) port and value", Bool(ApPortInP = $1256 And Z80A = $5A))
+  ApCheck("OUT (C),A port and value", Bool(ApPortOutP = $9A78 And ApPortOutV = $5A))
+  CompilerIf #Z80_MEM_HOOKS = 1
+    ; ---- memory hooks: page $50 read and write, and a push into a hooked page
+    ApFresh()
+    Z80PageRd($50) = 1 : Z80PageWr($50) = 1 : Z80PageWr($E0) = 1
+    Z80Mem($5003) = $11
+    Z80Mem(0) = $3A : Z80Mem(1) = $03 : Z80Mem(2) = $50        ; LD A,($5003)
+    Z80Mem(3) = $32 : Z80Mem(4) = $07 : Z80Mem(5) = $50        ; LD ($5007),A
+    Z80Mem(6) = $31 : Z80Mem(7) = $00 : Z80Mem(8) = $E1        ; LD SP,$E100
+    Z80Mem(9) = $C5                                            ; PUSH BC
+    Z80BC = $BEEF
+    Z80Run(ApUnits(4, 13 + 13 + 10 + 11))
+    ApCheck("read hook", Bool(Z80A = $C3 And ApHookRd = 1))
+    ApCheck("write hooks", Bool(ApHookWr = 3 And ApHookAddr = $E0FE And ApHookVal = $EF And Z80Mem($5007) = 0 And Z80Mem($E0FF) = 0))
+  CompilerEndIf
+EndProcedure
+
+Procedure Main()
+  SafetyBoot()
+  ClockInitKhz(#CLOCK_KHZ)
+  TimerInit()
+  UsbSerialInit()
+  WaitHost()
+  Say("Z80 API checks timed=") : Num(#Z80_TIMED) : Say(" shared=") : Num(#Z80_SHARED_TAIL) : Say(" hooks=") : Num(#Z80_MEM_HOOKS) : Eol()
+  ApRun()
+  Say("API checks=") : Num(ApN) : Say(" failures=") : Num(ApFail)
+  If ApFail = 0
+    Say(" PASS")
+  Else
+    Say(" FAIL")
+  EndIf
+  Eol()
+  Repeat
+    WaitUs(1000000)
+  ForEver
+EndProcedure
