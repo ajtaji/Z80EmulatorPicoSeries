@@ -124,7 +124,8 @@ serial output, captured in `docs/`.
 - ZEXDOC/ZEXALL (Frank D. Cringle, GPL v2, `tests/upstream`) run under a
   minimal CP/M BDOS (functions 2 and 9 through `OUT (0),A` at `$FE00`, warm
   boot = `HALT` at 0). One full run takes about 30 minutes on the Pico W, so
-  `tools/zex_chunks.sh` runs it in board leases of at most 18 minutes, each
+  `tools/zex_chunks.sh` runs it in board leases (the recorded runs used leases of at most
+  18 minutes; the script now uses `lease.ps1` and 15-minute leases), each
   booting the exerciser at the first test the previous lease did not finish.
   Logs: `docs/zexdoc-board.log`, `docs/zexall-board.log`; SST/API/bench:
   `docs/board-sst-timed-untimed.log`, `docs/board-sst-shared-api-bench.log`,
@@ -172,7 +173,8 @@ not been run on a Pico 2 W: that board belongs to other work.
 
 ```text
 tools/build.ps1 -Source tests/zex.picow -Output build/zex.uf2      # build only
-tools/board.sh tests/zex.picow build/zex.uf2 600                    # build, upload, capture (shared COM7 lease)
+tools/board.ps1 -Jobs "tests/sst.picow|build/sst.uf2|12"               # build, upload, capture (lease.ps1)
+tools/zex_chunks.sh 1 0 docs/zexall-board.log COM6                  # a long run, in 15-minute leases
 ```
 
 `build.ps1` refuses any image that reaches flash `0x10050000` (the NES ROM
