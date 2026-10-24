@@ -9,7 +9,7 @@ Per vector, little-endian:
   nram, then nram x (addr word, initial byte, final byte)
   nports, then nports x (addr word, value, dir 1=in 2=out)
   13 words final, i r im flags(iff1 | iff2<<1), q, cycles
-Usage: py -3 tools/embed_sst.py [per_opcode] [max_bytes_per_batch]
+Usage: py -3 tools/embed_sst.py [per_opcode] [max_bytes_per_batch] [--out file]
 """
 import json
 import os
@@ -17,8 +17,11 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HEAD = os.path.join(ROOT, 'tests', 'upstream', 'sst', 'head')
-PER = int(sys.argv[1]) if len(sys.argv) > 1 else 5
-MAXB = int(sys.argv[2]) if len(sys.argv) > 2 else 190000
+ARGS = [a for a in sys.argv[1:] if not a.startswith('--')]
+PER = int(ARGS[0]) if len(ARGS) > 0 else 5
+MAXB = int(ARGS[1]) if len(ARGS) > 1 else 190000
+# --out <file>: one batch, written to that file only (the desktop's copy)
+OUTFILE = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else None
 
 REGS = ['pc', 'sp', 'af', 'bc', 'de', 'hl', 'af_', 'bc_', 'de_', 'hl_', 'ix', 'iy', 'wz']
 
@@ -105,6 +108,12 @@ def main():
             lines.append('  Data.a ' + ','.join('$%02X' % x for x in data[j:j + 32]))
         lines.append('SstVectorsEnd:')
         lines.append('EndDataSection')
+        if OUTFILE:
+            if len(batches) != 1:
+                raise SystemExit('--out needs one batch: raise max_bytes')
+            with open(OUTFILE, 'w', newline='\n') as fh:
+                fh.write('\n'.join(lines) + '\n')
+            continue
         for ext in ('pico', 'pico2'):
             with open(os.path.join(ROOT, 'tests', 'sst_batch%d.%s' % (k + 1, ext)), 'w', newline='\n') as fh:
                 fh.write('\n'.join(lines) + '\n')

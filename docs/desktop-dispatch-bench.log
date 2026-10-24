@@ -1,0 +1,65 @@
+Desktop dispatch benchmark 2026-10-23T21:09:39, 11th Gen Intel(R) Core(TM) i9-11900K @ 3.50GHz
+== z80_console_untimed.exe run 1
+Z80 desktop bench timed=0 hooks=1 shared=0
+register/branch instructions=100000000 us=315221 instructions/s=317237747
+alu instructions=100000000 us=202571 instructions/s=493654076
+memory instructions=100000000 us=190992 instructions/s=523582139
+ldir instructions=100000000 us=576044 instructions/s=173597850
+indexed instructions=100000000 us=251153 instructions/s=398163669
+call/stack instructions=100000000 us=230032 instructions/s=434722125
+== z80_console_procs_untimed.exe run 1
+Z80 desktop bench timed=0 hooks=1 shared=0
+register/branch instructions=100000000 us=379958 instructions/s=263186983
+alu instructions=100000000 us=322427 instructions/s=310147723
+memory instructions=100000000 us=246504 instructions/s=405672930
+ldir instructions=100000000 us=615959 instructions/s=162348467
+indexed instructions=100000000 us=357254 instructions/s=279912891
+call/stack instructions=100000000 us=389752 instructions/s=256573410
+== z80_console.exe run 1
+Z80 desktop bench timed=1 hooks=1 shared=0
+register/branch T-states=400000001 us=178144 emulated kHz=2245374
+alu T-states=400000005 us=177083 emulated kHz=2258827
+memory T-states=400000000 us=109574 emulated kHz=3650501
+ldir T-states=400000001 us=118954 emulated kHz=3362644
+indexed T-states=400000001 us=115433 emulated kHz=3465213
+call/stack T-states=400000006 us=96338 emulated kHz=4152048
+== z80_console_procs.exe run 1
+Z80 desktop bench timed=1 hooks=1 shared=0
+register/branch T-states=400000001 us=189834 emulated kHz=2107104
+alu T-states=400000005 us=245612 emulated kHz=1628584
+memory T-states=400000000 us=135851 emulated kHz=2944402
+ldir T-states=400000001 us=103720 emulated kHz=3856536
+indexed T-states=400000001 us=183499 emulated kHz=2179848
+call/stack T-states=400000006 us=168483 emulated kHz=2374126
+== z80_console_untimed.exe run 2
+Z80 desktop bench timed=0 hooks=1 shared=0
+register/branch instructions=100000000 us=328702 instructions/s=304226928
+alu instructions=100000000 us=210233 instructions/s=475662717
+memory instructions=100000000 us=191964 instructions/s=520931007
+ldir instructions=100000000 us=540851 instructions/s=184893806
+indexed instructions=100000000 us=255053 instructions/s=392075372
+call/stack instructions=100000000 us=240790 instructions/s=415299638
+== z80_console_procs_untimed.exe run 2
+Z80 desktop bench timed=0 hooks=1 shared=0
+register/branch instructions=100000000 us=406468 instructions/s=246021827
+alu instructions=100000000 us=374416 instructions/s=267082603
+memory instructions=100000000 us=285697 instructions/s=350021176
+ldir instructions=100000000 us=759353 instructions/s=131691058
+indexed instructions=100000000 us=306236 instructions/s=326545540
+call/stack instructions=100000000 us=397374 instructions/s=251652096
+== z80_console.exe run 2
+Z80 desktop bench timed=1 hooks=1 shared=0
+register/branch T-states=400000001 us=162496 emulated kHz=2461599
+alu T-states=400000005 us=159512 emulated kHz=2507648
+memory T-states=400000000 us=104993 emulated kHz=3809777
+ldir T-states=400000001 us=106230 emulated kHz=3765414
+indexed T-states=400000001 us=107342 emulated kHz=3726407
+call/stack T-states=400000006 us=99540 emulated kHz=4018485
+== z80_console_procs.exe run 2
+Z80 desktop bench timed=1 hooks=1 shared=0
+register/branch T-states=400000001 us=203521 emulated kHz=1965399
+alu T-states=400000005 us=295387 emulated kHz=1354155
+memory T-states=400000000 us=147764 emulated kHz=2707019
+ldir T-states=400000001 us=133817 emulated kHz=2989156
+indexed T-states=400000001 us=158011 emulated kHz=2531469
+call/stack T-states=400000006 us=141988 emulated kHz=2817139
