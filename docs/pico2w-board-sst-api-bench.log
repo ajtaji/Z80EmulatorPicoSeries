@@ -1,0 +1,621 @@
+﻿
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10045D00
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10044D00
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10045D00
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10044D00
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10045D00
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10044D00
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10022D00
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10021E00
+> RP2350 ASSEMBLER: 93456 bytes of code run from SRAM at $20000000-$20016D0F, copied from flash at boot; 361560 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x1001A400
+> RP2350 ASSEMBLER: 89456 bytes of code run from SRAM at $20000000-$20015D6F, copied from flash at boot; 365560 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10019400
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376552 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10016000
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372616 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10017000
+image ends at 0x10045D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst1.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 61275
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 58546 lines, 78 routines; core 0 reaches 35134 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 58546 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 6 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|285792|4194304
+CYCLES_TOTAL_RP2350|54289|straight-line, not-taken branches
+REGMAP_RP2350|5592|92|18|341|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1200|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst1.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 285792 bytes into 1117 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1.uf2
+pmfc: uploading p2sst1.uf2 (RP2350) through COM6
+> [UF2] p2sst1.uf2 is a ready UF2: 1117 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10045CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst1.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 1 timed=1 shared=0 sabotage=0 clk_sys kHz=150000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 1 vectors=2648 failures=0 us=78169 PASS
+
+pmfc: read COM6 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10044D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst1u.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 61275
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 56621 lines, 78 routines; core 0 reaches 34025 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 56621 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1u.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 5 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1u.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1u.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|281836|4194304
+CYCLES_TOTAL_RP2350|53177|straight-line, not-taken branches
+REGMAP_RP2350|5594|92|18|340|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1199|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst1u.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 281836 bytes into 1101 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1u.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst1u.uf2
+pmfc: uploading p2sst1u.uf2 (RP2350) through COM6
+> [UF2] p2sst1u.uf2 is a ready UF2: 1101 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10044CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 is still there 2.0 s after the 1200-baud touch (a program built before the touch existed does not answer it); sending the reset phrase.
+> [WARN] Could not open COM6 to send the reset command (the board may already be rebooting). Press BOOTSEL + reset manually if the drive does not appear.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst1u.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 1 timed=0 shared=0 sabotage=0 clk_sys kHz=150000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 1 vectors=2648 failures=0 us=77650 PASS
+
+pmfc: read COM6 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10045D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst2.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 61275
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 58546 lines, 78 routines; core 0 reaches 35134 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 58546 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 6 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|285772|4194304
+CYCLES_TOTAL_RP2350|54289|straight-line, not-taken branches
+REGMAP_RP2350|5592|92|18|341|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1200|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst2.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 285772 bytes into 1117 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2.uf2
+pmfc: uploading p2sst2.uf2 (RP2350) through COM6
+> [UF2] p2sst2.uf2 is a ready UF2: 1117 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10045CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst2.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 2 timed=1 shared=0 sabotage=0 clk_sys kHz=150000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 2 vectors=2377 failures=0 us=78797 PASS
+
+pmfc: read COM6 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10044D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst2u.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 61275
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 56621 lines, 78 routines; core 0 reaches 34025 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 56621 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2u.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 5 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2u.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2u.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|281816|4194304
+CYCLES_TOTAL_RP2350|53177|straight-line, not-taken branches
+REGMAP_RP2350|5594|92|18|340|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1199|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst2u.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 281816 bytes into 1101 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2u.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst2u.uf2
+pmfc: uploading p2sst2u.uf2 (RP2350) through COM6
+> [UF2] p2sst2u.uf2 is a ready UF2: 1101 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10044CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst2u.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 2 timed=0 shared=0 sabotage=0 clk_sys kHz=150001
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 2 vectors=2377 failures=0 us=78189 PASS
+
+pmfc: read COM6 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10045D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst3.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 61276
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 58548 lines, 78 routines; core 0 reaches 35134 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 58548 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 6 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|285808|4194304
+CYCLES_TOTAL_RP2350|54289|straight-line, not-taken branches
+REGMAP_RP2350|5592|92|18|341|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1200|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst3.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 285808 bytes into 1117 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3.uf2
+pmfc: uploading p2sst3.uf2 (RP2350) through COM6
+> [UF2] p2sst3.uf2 is a ready UF2: 1117 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10045CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst3.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 3 timed=1 shared=0 sabotage=0 clk_sys kHz=150000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 3 vectors=2422 failures=0 us=78683 PASS
+
+pmfc: read COM6 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10044D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst3u.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 61276
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 56623 lines, 78 routines; core 0 reaches 34025 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 56623 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3u.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 5 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3u.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3u.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|281852|4194304
+CYCLES_TOTAL_RP2350|53177|straight-line, not-taken branches
+REGMAP_RP2350|5594|92|18|340|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1199|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst3u.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 281852 bytes into 1101 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3u.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst3u.uf2
+pmfc: uploading p2sst3u.uf2 (RP2350) through COM6
+> [UF2] p2sst3u.uf2 is a ready UF2: 1101 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10044CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 is still there 2.0 s after the 1200-baud touch (a program built before the touch existed does not answer it); sending the reset phrase.
+> [WARN] Could not open COM6 to send the reset command (the board may already be rebooting). Press BOOTSEL + reset manually if the drive does not appear.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst3u.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 3 timed=0 shared=0 sabotage=0 clk_sys kHz=150001
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 3 vectors=2422 failures=0 us=78033 PASS
+
+pmfc: read COM6 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10022D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst4.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 56799
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 49594 lines, 78 routines; core 0 reaches 35134 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 49594 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372556 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 6 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|142544|4194304
+CYCLES_TOTAL_RP2350|54289|straight-line, not-taken branches
+REGMAP_RP2350|5592|92|18|341|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1200|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst4.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 142544 bytes into 557 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4.uf2
+pmfc: uploading p2sst4.uf2 (RP2350) through COM6
+> [UF2] p2sst4.uf2 is a ready UF2: 557 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10022CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst4.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 4 timed=1 shared=0 sabotage=0 clk_sys kHz=150000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 4 vectors=573 failures=0 us=20178 PASS
+
+pmfc: read COM6 for 12 s: 271 bytes.
+pmfc: OK
+image ends at 0x10021E00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2sst4u.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55097 of 56799
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 47669 lines, 78 routines; core 0 reaches 34025 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 47669 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4u.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376492 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 5 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4u.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4u.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|138588|4194304
+CYCLES_TOTAL_RP2350|53177|straight-line, not-taken branches
+REGMAP_RP2350|5594|92|18|340|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1199|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2sst4u.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 138588 bytes into 542 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4u.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2sst4u.uf2
+pmfc: uploading p2sst4u.uf2 (RP2350) through COM6
+> [UF2] p2sst4u.uf2 is a ready UF2: 542 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10021DFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (1.4 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at H:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at H:\
+> [NATIVE UPLOADER] Wrote p2sst4u.uf2 to H:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 4 timed=0 shared=0 sabotage=0 clk_sys kHz=150001
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 4 vectors=573 failures=0 us=20026 PASS
+
+pmfc: read COM6 for 12 s: 271 bytes.
+pmfc: OK
+image ends at 0x1001A400
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\api.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55095 of 55359
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 53304 lines, 81 routines; core 0 reaches 39748 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 53304 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2api.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 93456 bytes of code run from SRAM at $20000000-$20016D0F, copied from flash at boot; 361560 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 6 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2api.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2api.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|107504|4194304
+CYCLES_TOTAL_RP2350|62313|straight-line, not-taken branches
+REGMAP_RP2350|6524|92|45|394|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|944|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2api.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 107504 bytes into 420 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2api.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2api.uf2
+pmfc: uploading p2api.uf2 (RP2350) through COM6
+> [UF2] p2api.uf2 is a ready UF2: 420 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x1001A3FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.1 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at I:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at I:\
+> [NATIVE UPLOADER] Wrote p2api.uf2 to I:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 10 s (the port opened 2 ms after the upload, attempt 1).
+Z80 API checks timed=1 shared=0 hooks=1
+API checks=19 failures=0 PASS
+
+pmfc: read COM6 for 10 s: 72 bytes.
+pmfc: OK
+image ends at 0x10019400
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2apiu.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55095 of 55359
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 51306 lines, 81 routines; core 0 reaches 38585 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 51306 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2apiu.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 89456 bytes of code run from SRAM at $20000000-$20015D6F, copied from flash at boot; 365560 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 5 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2apiu.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2apiu.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|103332|4194304
+CYCLES_TOTAL_RP2350|61123|straight-line, not-taken branches
+REGMAP_RP2350|6499|92|43|393|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|943|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2apiu.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 103332 bytes into 404 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2apiu.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2apiu.uf2
+pmfc: uploading p2apiu.uf2 (RP2350) through COM6
+> [UF2] p2apiu.uf2 is a ready UF2: 404 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x100193FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at I:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at I:\
+> [NATIVE UPLOADER] Wrote p2apiu.uf2 to I:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 10 s (the port opened 1 ms after the upload, attempt 1).
+Z80 API checks timed=0 shared=0 hooks=1
+API checks=18 failures=0 PASS
+
+pmfc: read COM6 for 10 s: 72 bytes.
+pmfc: OK
+image ends at 0x10016000
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\bench.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55095 of 55286
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 43897 lines, 74 routines; core 0 reaches 33306 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 43897 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bench.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 79000 bytes of code run from SRAM at $20000000-$20013497, copied from flash at boot; 376552 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 5 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bench.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bench.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|90096|4194304
+CYCLES_TOTAL_RP2350|51973|straight-line, not-taken branches
+REGMAP_RP2350|5423|88|18|317|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1198|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2bench.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 90096 bytes into 352 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bench.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bench.uf2
+pmfc: uploading p2bench.uf2 (RP2350) through COM6
+> [UF2] p2bench.uf2 is a ready UF2: 352 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10015FFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at I:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at I:\
+> [NATIVE UPLOADER] Wrote p2bench.uf2 to I:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 15 s (the port opened 2 ms after the upload, attempt 1).
+Z80 bench clk_sys kHz=150001 timed=0 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch instructions=1000000 us=257142 instructions/s=3888901
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794461 instructions/s=1258715
+indexed instructions=1000000 us=303522 instructions/s=3294654
+call/stack instructions=1000000 us=328572 instructions/s=3043472
+register/branch instructions=1000000 us=256622 instructions/s=3896782
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794461 instructions/s=1258715
+indexed instructions=1000000 us=303522 instructions/s=3294654
+call/stack instructions=1000000 us=328573 instructions/s=3043463
+register/branch instructions=1000000 us=256622 instructions/s=3896782
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794460 instructions/s=1258716
+indexed instructions=1000000 us=303521 instructions/s=3294664
+call/stack instructions=1000000 us=328573 instructions/s=3043463
+register/branch instructions=1000000 us=256622 instructions/s=3896782
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794461 instructions/s=1258715
+indexed instructions=1000000 us=303522 instructions/s=3294654
+
+pmfc: read COM6 for 15 s: 1532 bytes.
+pmfc: OK
+image ends at 0x10017000
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_p2bencht.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55095 of 55286
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 45832 lines, 74 routines; core 0 reaches 34421 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 45832 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bencht.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 82936 bytes of code run from SRAM at $20000000-$200143F7, copied from flash at boot; 372616 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 6 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bencht.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bencht.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|94064|4194304
+CYCLES_TOTAL_RP2350|53094|straight-line, not-taken branches
+REGMAP_RP2350|5426|88|18|317|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|1199|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p2bencht.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 94064 bytes into 368 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bencht.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p2bencht.uf2
+pmfc: uploading p2bencht.uf2 (RP2350) through COM6
+> [UF2] p2bencht.uf2 is a ready UF2: 368 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10016FFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at I:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at I:\
+> [NATIVE UPLOADER] Wrote p2bencht.uf2 to I:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 15 s (the port opened 2 ms after the upload, attempt 1).
+Z80 bench clk_sys kHz=150001 timed=1 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch T-states=10000010 us=329669 emulated kHz=30333
+alu T-states=10000002 us=589632 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390434 emulated kHz=25612
+indexed T-states=10000011 us=310372 emulated kHz=32219
+call/stack T-states=10000006 us=294516 emulated kHz=33954
+register/branch T-states=10000010 us=329162 emulated kHz=30380
+alu T-states=10000002 us=589632 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390433 emulated kHz=25612
+indexed T-states=10000011 us=310372 emulated kHz=32219
+call/stack T-states=10000006 us=294516 emulated kHz=33954
+register/branch T-states=10000010 us=329161 emulated kHz=30380
+alu T-states=10000002 us=589632 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390434 emulated kHz=25612
+indexed T-states=10000011 us=310371 emulated kHz=32219
+call/stack T-states=10000006 us=294516 emulated kHz=33954
+register/branch T-states=10000010 us=329161 emulated kHz=30380
+alu T-states=10000002 us=589631 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390434 emulated kHz=25612
+indexed T-states=10000011 us=310372 emulated kHz=32219
+
+pmfc: read COM6 for 15 s: 1371 bytes.
+pmfc: OK
+
+

@@ -169,9 +169,32 @@ in `docs/picow-dispatch-disassembly.txt` and `docs/pico2w-dispatch-disassembly.t
 (`tools/disasm_dispatch.py`, Capstone). Tried and reverted: the budget in r6
 with memory and table bases in r9/r11 (slower; `docs/benchmark-notes.md`).
 
-The Pico 2 W build (`src/z80.pico2`, `tests/*.pico2w`) compiles (79 KB of
-SRAM code, 376 KB SRAM free) and its dispatch bytes are checked, but it has
-not been run on a Pico 2 W: that board belongs to other work.
+## Pico 2 W (RP2350, COM6, 150 MHz)
+
+The same tests on the physical Pico 2 W (`src/z80.pico2`, `tests/*.pico2w`;
+79 KB of SRAM code untimed, 376 KB SRAM free), run after the board was freed
+for this work: `docs/pico2w-board-sst-api-bench.log`,
+`docs/pico2w-zexdoc-board.log`, `docs/pico2w-zexall-board.log`.
+
+| Check | Result |
+|---|---|
+| SingleStepTests, 8,020 vectors, timed and untimed | 0 failures |
+| API / interrupt checks, timed and untimed | 19 / 18, 0 failures |
+| ZEXDOC | 67 of 67 OK, 0 errors |
+| ZEXALL | 67 of 67 OK, 0 errors |
+
+| Mix (untimed, per-handler tail) | instructions/s | timed, emulated MHz |
+|---|---:|---:|
+| register/branch | 3.89 M | 30.4 |
+| ALU | 3.45 M | 17.0 |
+| memory | 4.79 M | 34.8 |
+| LDIR (per repeat) | 1.26 M | 25.6 |
+| indexed | 3.29 M | 32.2 |
+| call/stack | 3.04 M | 34.0 |
+| ZEXDOC as a whole | 3.74 M | |
+
+At 150 MHz the Cortex-M33 runs this core about as fast as the Pico W's M0+
+at 200 MHz.
 
 ## Building
 

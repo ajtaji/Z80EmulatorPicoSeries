@@ -6,6 +6,8 @@
 set -u
 cd "$(dirname "$0")/.."
 ALL="$1"; START="$2"; LOG="$3"; PORT="${4:-COM6}"
+# lease.ps1 refuses COM7 runs over 15 minutes; the RP2350 boards take 18.
+if [ "$PORT" = "COM7" ]; then MAXS=840; else MAXS=1080; fi
 while [ "$START" -lt 67 ]; do
   # COM7 is the Pico W (RP2040); COM6 and COM20 are RP2350 boards.
   if [ "$PORT" = "COM7" ]; then EXT=picow; else EXT=pico2w; fi
@@ -13,7 +15,7 @@ while [ "$START" -lt 67 ]; do
   sed -e "s/#ZEX_ALL = 0/#ZEX_ALL = $ALL/" -e "s/#ZEX_FIRST = 0/#ZEX_FIRST = $START/" tests/zex.$EXT > "$SRC"
   echo "=== chunk from test $START $(date +%H:%M:%S)" >> "$LOG"
   BEFORE=$(grep -c "ms\]  \(OK\|ERROR\)" "$LOG")
-  powershell -NoProfile -ExecutionPolicy Bypass -File tools/board_until.ps1 -Source "$SRC" -Output "build/zex${ALL}_$START.uf2" -Port "$PORT" -MaxSeconds 840 -Pattern "ZEX ok=" -Log "$LOG"
+  powershell -NoProfile -ExecutionPolicy Bypass -File tools/board_until.ps1 -Source "$SRC" -Output "build/zex${ALL}_$START.uf2" -Port "$PORT" -MaxSeconds "$MAXS" -Pattern "ZEX ok=" -Log "$LOG"
   sleep 120   # let other waiters in after a long run
   AFTER=$(grep -c "ms\]  \(OK\|ERROR\)" "$LOG")
   DONE=$((AFTER - BEFORE))
