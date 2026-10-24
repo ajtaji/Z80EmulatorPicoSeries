@@ -15,6 +15,10 @@ the R register, and T-state counts (switchable timed / untimed build).
 Generated source: `src/z80.pico` (Pico W) and `src/z80.pico2` (Pico 2 W),
 from `tools/gen_z80.py`. Edit the generator, then `py -3 tools/gen_z80.py`.
 
+**On the PC:** `desktop/` holds the same core in PureBasic (generated from the same
+handlers, same API) with a Neon Arcade window and console test runners; it passes the
+same suites. See `desktop/README.md`.
+
 ## Using the core (the API)
 
 Define every switch, then include the core:
