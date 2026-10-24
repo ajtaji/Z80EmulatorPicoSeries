@@ -98,18 +98,75 @@ r = Z80GetR() : Z80SetR(r) ; R outside Z80Run
   Z80IY Z80WZ Z80AF2 Z80BC2 Z80DE2 Z80HL2 Z80I Z80IM Z80IFF1 Z80IFF2`
   (pairs hold 0..65535; the primed AF is `A << 8 | F`).
 
-## Verification
+## Verification (physical Pico W, COM7, 200 MHz)
 
-See `docs/` for the captured board logs. All runs are on the physical
-Pico W (COM7, 200 MHz); no host emulator executes the firmware.
+No host emulator executes the firmware; every result below is the board's own
+serial output, captured in `docs/`.
 
-- `tests/sst.picow`: 8,020 SingleStepTests one-instruction vectors (the first
-  five of each of the 1,604 opcode files, `tests/upstream/sst`, MIT), in four
-  batches: every register, R, WZ, Q, IFF1/2, IM, memory, port traffic and the
-  T-state count of each instruction (timed build).
-- `tests/zex.picow`: ZEXDOC and ZEXALL (Frank D. Cringle, GPL v2,
-  `tests/upstream`) under a minimal CP/M BDOS (functions 2 and 9 through
-  `OUT (0),A` at `$FE00`, warm boot = `HALT` at 0).
+| Check | Builds | Result |
+|---|---|---|
+| SingleStepTests, 8,020 one-instruction vectors (`tests/sst*`) | timed and untimed, per-handler and shared tails | 0 failures in all four builds |
+| Planted fault in the checker (`#SST_SABOTAGE = 1`) | timed | caught: vector 100, F |
+| Interrupt / API checks (`tests/api*`) | timed and untimed, both tails, memory hooks on | 19 / 18 checks, 0 failures |
+| ZEXDOC (`tests/zex.picow`) | untimed, per-handler tail | 67 of 67 OK, 0 errors |
+| ZEXALL (`tests/zex.picow`, `#ZEX_ALL = 1`) | untimed, per-handler tail | 67 of 67 OK, 0 errors |
+
+- SingleStepTests: the first five vectors of each of the 1,604 opcode files
+  (`tests/upstream/sst`, MIT), in four batches. Each vector sets the whole
+  CPU and memory, runs one instruction with `Z80Run(1)` and compares every
+  register, R, WZ, Q, IFF1/2, IM, memory, port traffic and (timed) the
+  instruction's T-states.
+- API checks: run budgets and timed overshoot, R across windows, IM 1 held
+  request, the EI delay, EI as the last instruction of a window, IM 2 vector,
+  IM 0 RST and IM 0 non-RST (stops with `Z80Error = 2`), NMI and RETN, HALT
+  using the budget and waking, IN/OUT port values, read/write hooks and a
+  PUSH through a hooked page.
+- ZEXDOC/ZEXALL (Frank D. Cringle, GPL v2, `tests/upstream`) run under a
+  minimal CP/M BDOS (functions 2 and 9 through `OUT (0),A` at `$FE00`, warm
+  boot = `HALT` at 0). One full run takes about 30 minutes on the Pico W, so
+  `tools/zex_chunks.sh` runs it in board leases of at most 18 minutes, each
+  booting the exerciser at the first test the previous lease did not finish.
+  Logs: `docs/zexdoc-board.log`, `docs/zexall-board.log`; SST/API/bench:
+  `docs/board-sst-timed-untimed.log`, `docs/board-sst-shared-api-bench.log`,
+  `docs/board-sst-planted-fault.log`.
+
+## Speed (physical Pico W, 200 MHz)
+
+Untimed builds: guest instructions per second, 1,000,000 instructions per
+sample (a prefixed instruction counts once; LDIR counts each repeat).
+
+| Mix | per-handler asm tail (default) | shared tail | plain PureMetal `Goto` |
+|---|---:|---:|---:|
+| register/branch (DEC C / JR NZ / DJNZ) | 4.08 M | 3.92 M | 3.42 M |
+| ALU (ADD, XOR, RLCA, AND, OR, SUB, ADC, CP n) | 3.69 M | 3.19 M | 3.14 M |
+| memory (LD A,(HL) / INC HL / LD (DE),A / INC (HL)) | 5.01 M | 4.40 M | 4.02 M |
+| LDIR (per repeat) | 1.18 M | 1.12 M | 1.05 M |
+| indexed ((IX+d), (IY+d), BIT n,(IY+d)) | 3.54 M | 3.24 M | 2.83 M |
+| CALL / PUSH / POP / RET | 2.63 M | 2.36 M | 2.34 M |
+| ZEXDOC as a whole | 3.67 M | | |
+
+Timed builds: emulated T-states per second (10,000,000 per sample).
+
+| Mix | timed, per-handler tail | timed + memory hooks + shared tail (the Ms. Pac-Man build) |
+|---|---:|---:|
+| register/branch | 29.9 MHz | 27.1 MHz |
+| ALU | 17.5 MHz | 15.3 MHz |
+| memory | 34.8 MHz | 28.0 MHz |
+| LDIR | 23.7 MHz | 20.8 MHz |
+| indexed | 33.9 MHz | 28.1 MHz |
+| call/stack | 28.7 MHz | 21.0 MHz |
+
+Ms. Pac-Man's Z80 runs at 3.072 MHz. SRAM code of `Z80Run` (compiler report,
+Pico W): untimed 80.9 KB per-handler / 61.2 KB shared; timed 86.6 KB
+per-handler; timed + memory hooks + shared tail 86.6 KB (the hook calls cost
+what the shared tail saves). The actual dispatch bytes in the flashed images are disassembled
+in `docs/picow-dispatch-disassembly.txt` and `docs/pico2w-dispatch-disassembly.txt`
+(`tools/disasm_dispatch.py`, Capstone). Tried and reverted: the budget in r6
+with memory and table bases in r9/r11 (slower; `docs/benchmark-notes.md`).
+
+The Pico 2 W build (`src/z80.pico2`, `tests/*.pico2w`) compiles (79 KB of
+SRAM code, 376 KB SRAM free) and its dispatch bytes are checked, but it has
+not been run on a Pico 2 W: that board belongs to other work.
 
 ## Building
 

@@ -1,0 +1,6 @@
+# Planted-fault run of tests/sst.picow (#SST_SABOTAGE = 1), Pico W, 2026-10-23 17:2x.
+# The checker must report vector 100's carry flag (field 4); it did. Core of commit-to-be 17:15 (before the Q fixes).
+Z80 SingleStepTests batch 1 timed=1 shared=0 sabotage=1 clk_sys kHz=200000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+vector 100 op 14000000 field 4 expected 0000 got 0001
+SST batch 1 vectors=2648 failures=1 us=72385 FAIL

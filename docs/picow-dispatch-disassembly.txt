@@ -1,0 +1,107 @@
+Z80Run copy source in flash: 0x100030F4 (40 of 40 handler starts follow bx r1); runs at 0x20000000
+op0d at 0x2000361E in SRAM (flash 0x10006712)
+  2000361E  c748     ldr                      r0, [pc, #0x31c]
+  20003620  0178     ldrb                     r1, [r0]
+  20003622  0291     str                      r1, [sp, #8]
+  20003624  0800     movs                     r0, r1
+  20003626  411e     subs                     r1, r0, #1
+  20003628  ff20     movs                     r0, #0xff
+  2000362A  0840     ands                     r0, r1
+  2000362C  0490     str                      r0, [sp, #0x10]
+  2000362E  2800     movs                     r0, r5
+  20003630  0121     movs                     r1, #1
+  20003632  0140     ands                     r1, r0
+  20003634  0498     ldr                      r0, [sp, #0x10]
+  20003636  c34a     ldr                      r2, [pc, #0x30c]
+  20003638  165c     ldrb                     r6, [r2, r0]
+  2000363A  0800     movs                     r0, r1
+  2000363C  3043     orrs                     r0, r6
+  2000363E  0500     movs                     r5, r0
+  20003640  0498     ldr                      r0, [sp, #0x10]
+  20003642  be49     ldr                      r1, [pc, #0x2f8]
+  20003644  0870     strb                     r0, [r1]
+  20003646  5846     mov                      r0, fp
+  20003648  411e     subs                     r1, r0, #1
+  2000364A  0591     str                      r1, [sp, #0x14]
+  2000364C  5846     mov                      r0, fp
+  2000364E  401e     subs                     r0, r0, #1
+  20003650  8346     mov                      fp, r0
+  20003652  04d1     bne                      #0x2000365e
+  20003654  01b4     push                     {r0}
+  20003656  b748     ldr                      r0, [pc, #0x2dc]
+  20003658  8446     mov                      ip, r0
+  2000365A  01bc     pop                      {r0}
+  2000365C  6047     bx                       ip
+  2000365E  b249     ldr                      r1, [pc, #0x2c8]
+  20003660  0a5d     ldrb                     r2, [r1, r4]
+  20003662  641c     adds                     r4, r4, #1
+  20003664  a4b2     uxth                     r4, r4
+  20003666  9200     lsls                     r2, r2, #2
+  20003668  b349     ldr                      r1, [pc, #0x2cc]
+  2000366A  8958     ldr                      r1, [r1, r2]
+  2000366C  0847     bx                       r1
+op80 at 0x200052BC in SRAM (flash 0x100083B0)
+  200052BC  7948     ldr                      r0, [pc, #0x1e4]
+  200052BE  411c     adds                     r1, r0, #1
+  200052C0  0878     ldrb                     r0, [r1]
+  200052C2  0290     str                      r0, [sp, #8]
+  200052C4  4046     mov                      r0, r8
+  200052C6  0299     ldr                      r1, [sp, #8]
+  200052C8  4218     adds                     r2, r0, r1
+  200052CA  0492     str                      r2, [sp, #0x10]
+  200052CC  1100     movs                     r1, r2
+  200052CE  ff22     movs                     r2, #0xff
+  200052D0  0a40     ands                     r2, r1
+  200052D2  7649     ldr                      r1, [pc, #0x1d8]
+  200052D4  8e5c     ldrb                     r6, [r1, r2]
+  200052D6  0299     ldr                      r1, [sp, #8]
+  200052D8  0200     movs                     r2, r0
+  200052DA  4a40     eors                     r2, r1
+  200052DC  0498     ldr                      r0, [sp, #0x10]
+  200052DE  1100     movs                     r1, r2
+  200052E0  4140     eors                     r1, r0
+  200052E2  0811     asrs                     r0, r1, #4
+  200052E4  1f21     movs                     r1, #0x1f
+  200052E6  0140     ands                     r1, r0
+  200052E8  7148     ldr                      r0, [pc, #0x1c4]
+  200052EA  425c     ldrb                     r2, [r0, r1]
+  200052EC  3000     movs                     r0, r6
+  200052EE  1043     orrs                     r0, r2
+  200052F0  0500     movs                     r5, r0
+  200052F2  0498     ldr                      r0, [sp, #0x10]
+  200052F4  ff21     movs                     r1, #0xff
+  200052F6  0140     ands                     r1, r0
+  200052F8  8846     mov                      r8, r1
+  200052FA  5846     mov                      r0, fp
+  200052FC  411e     subs                     r1, r0, #1
+  200052FE  0591     str                      r1, [sp, #0x14]
+  20005300  5846     mov                      r0, fp
+  20005302  401e     subs                     r0, r0, #1
+  20005304  8346     mov                      fp, r0
+  20005306  04d1     bne                      #0x20005312
+  20005308  01b4     push                     {r0}
+  2000530A  6048     ldr                      r0, [pc, #0x180]
+  2000530C  8446     mov                      ip, r0
+  2000530E  01bc     pop                      {r0}
+  20005310  6047     bx                       ip
+  20005312  5d49     ldr                      r1, [pc, #0x174]
+  20005314  0a5d     ldrb                     r2, [r1, r4]
+  20005316  641c     adds                     r4, r4, #1
+  20005318  a4b2     uxth                     r4, r4
+  2000531A  9200     lsls                     r2, r2, #2
+  2000531C  5c49     ldr                      r1, [pc, #0x170]
+  2000531E  8958     ldr                      r1, [r1, r2]
+  20005320  0847     bx                       r1
+pfxcb at 0x2000304E in SRAM (flash 0x10006142)
+  2000304E  3f48     ldr                      r0, [pc, #0xfc]
+  20003050  0168     ldr                      r1, [r0]
+  20003052  4a1c     adds                     r2, r1, #1
+  20003054  0260     str                      r2, [r0]
+  20003056  3749     ldr                      r1, [pc, #0xdc]
+  20003058  0a5d     ldrb                     r2, [r1, r4]
+  2000305A  641c     adds                     r4, r4, #1
+  2000305C  a4b2     uxth                     r4, r4
+  2000305E  9200     lsls                     r2, r2, #2
+  20003060  4449     ldr                      r1, [pc, #0x110]
+  20003062  8958     ldr                      r1, [r1, r2]
+  20003064  0847     bx                       r1
