@@ -1,3 +1,11 @@
 build/
 tests/_*
 desktop/*.exe
+# Frank D. Cringle's exercisers (GPL): fetched by tools/fetch_zex.py, never committed
+tests/upstream/zexdoc.com
+tests/upstream/zexall.com
+tests/upstream/zexdoc.z80
+tests/upstream/zexall.z80
+tests/zex_data.pico
+tests/zex_data.pico2
+PUBLISH-META.txt

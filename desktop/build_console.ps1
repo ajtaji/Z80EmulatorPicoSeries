@@ -3,6 +3,9 @@
 param([string]$Compiler = 'C:\Program Files\PureBasic\Compilers\pbcompilerc.exe')
 $ErrorActionPreference = 'Stop'
 $here = $PSScriptRoot
+if (!(Test-Path (Join-Path $here '..\tests\zex_data.pico'))) {
+    throw 'ZEXDOC/ZEXALL are not in this repository: run  py -3 tools\fetch_zex.py  first (it downloads, checks and embeds them).'
+}
 py -3 (Join-Path $here '..\tools\gen_z80_desktop.py') --check
 if ($LASTEXITCODE -ne 0) { throw 'desktop/z80core.pbi is stale' }
 # The procedure-table builds exist for the dispatch measurement only.

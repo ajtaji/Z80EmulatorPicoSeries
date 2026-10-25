@@ -27,7 +27,7 @@ EnableExplicit
 
 ; The engine first (its procedures use plain names the test code also uses).
 CompilerIf Not Defined(GL_ENGINE_DIR$, #PB_Constant)
-  #GL_ENGINE_DIR$ = "C:/Users/ajtaj/Desktop/Neon-Arcade-Dispay-Engine/"
+  #GL_ENGINE_DIR$ = "../../Neon-Arcade-Dispay-Engine/"   ; build.ps1 passes the real path
 CompilerEndIf
 XIncludeFile #GL_ENGINE_DIR$ + "GlTypes.pbi"
 XIncludeFile #GL_ENGINE_DIR$ + "GlUtilities.pbi"

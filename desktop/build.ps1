@@ -2,7 +2,7 @@
 # console programs through build_console.ps1 (the suites and benchmarks).
 param(
     [string]$Compiler = 'C:\Program Files\PureBasic\Compilers\pbcompilerc.exe',
-    [string]$Engine = 'C:/Users/ajtaj/Desktop/Neon-Arcade-Dispay-Engine/'
+    [string]$Engine = $(if ($env:NEON_ENGINE_DIR) { $env:NEON_ENGINE_DIR } else { (Resolve-Path (Join-Path $PSScriptRoot '..\..\Neon-Arcade-Dispay-Engine')).Path.Replace('\', '/') + '/' })
 )
 $ErrorActionPreference = 'Stop'
 $here = $PSScriptRoot

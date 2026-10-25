@@ -1,5 +1,5 @@
 param(
-    [string]$Compiler = 'C:\Users\ajtaj\Desktop\Github\PureBasicCode\OpenGl Work\ArduinoBasic\PureMetalForge.exe',
+    [string]$Compiler = $env:PUREMETAL_FORGE,   # the PureMetal Forge application (PureMetalForge.exe)
     [Parameter(Mandatory = $true)][string]$Source,
     [Parameter(Mandatory = $true)][string]$Output,
     [string]$Port = '',
@@ -11,6 +11,7 @@ param(
 # uploads through the compiler's own uploader and captures the serial output
 # for -Seconds; -Expect lists texts the capture must contain (and FAIL must not).
 $ErrorActionPreference = 'Stop'
+if (!$Compiler -or !(Test-Path $Compiler)) { throw 'Give the PureMetal Forge application with -Compiler <path\PureMetalForge.exe> or set PUREMETAL_FORGE.' }
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $sourcePath = [IO.Path]::GetFullPath((Join-Path $projectRoot $Source))
 $outputPath = [IO.Path]::GetFullPath((Join-Path $projectRoot $Output))
