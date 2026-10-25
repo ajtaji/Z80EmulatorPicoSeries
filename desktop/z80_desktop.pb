@@ -22,6 +22,7 @@
 #Z80_Q = 1
 #Z80_TRACK_R = 1
 #SST_SABOTAGE = 0
+#SST_HOOK_ALL = 0
 EnableExplicit
 
 ; The engine first (its procedures use plain names the test code also uses).

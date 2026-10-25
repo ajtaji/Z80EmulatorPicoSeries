@@ -48,6 +48,14 @@ Procedure SstRun()
   Protected fin.i, k.i, a.i, fl.i
   SstP = ?SstVectors : SstEnd = ?SstVectorsEnd
   SstN = 0 : SstFail = 0 : SstShown = 0
+  CompilerIf #Z80_MEM_HOOKS = 1
+    CompilerIf #SST_HOOK_ALL = 1
+      ; every page hooked: each data access goes through Z80MemRead/Write
+      For k = 0 To 255
+        Z80PageRd(k) = 1 : Z80PageWr(k) = 1
+      Next
+    CompilerEndIf
+  CompilerEndIf
   While SstP < SstEnd
     Z80Reset()
     Z80PC = SstW(0) : Z80SP = SstW(2)

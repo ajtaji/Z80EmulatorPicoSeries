@@ -13,6 +13,7 @@ CompilerEndIf
 #Z80_Q = 1
 #Z80_TRACK_R = 1
 #SST_SABOTAGE = 0
+#SST_HOOK_ALL = 0
 EnableExplicit
 CompilerIf Not Defined(Z80_PROCS, #PB_Constant)
   #Z80_PROCS = 0

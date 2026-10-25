@@ -88,6 +88,7 @@ def build():
     ed = g.build_ed()
     xcb, xcopy = g.build_xcb()
     run = g.run_text(cfg, base, ix, ixpass, iy, iypass, cb, ed, xcb, xcopy)
+    run = must(run, '@@MEMBASE@@\n', '')
 
     lines = strip_asm_branches(run.split('\n'))
     text = '\n'.join(lines)

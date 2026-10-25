@@ -1,0 +1,328 @@
+ÿþ
+> RP2040 ASSEMBLER: 80916 bytes of code run from SRAM at $20000000-$20013C13, copied from flash at boot; 108424 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10017100
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102736 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10018700
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10047400
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10047400
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10047400
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10024500
+image ends at 0x10017100
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\bench.picow  ->  RP2040
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_W.board
+[TRACE]    ... parsing line 54168 of 54359
+> ReserveRegister: 5 reservation(s) on RP2040
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico line 50 (included)
+> F_CPU = 200000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2040): 47642 lines, 79 routines; core 0 reaches 36698 instructions, core 1 0, interrupt handlers 36 - r12 and r4-r7 hold
+pmfc: 47642 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bench.uf2.asm
+> RP2040 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2040 ASSEMBLER: 80916 bytes of code run from SRAM at $20000000-$20013C13, copied from flash at boot; 108424 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2040 ASSEMBLER: branch relaxation converged in 3 rounds.
+> RP2040 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2040 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bench.cycles.txt
+> RP2040 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bench.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2040|94336|2097152
+CYCLES_TOTAL_RP2040|55804|straight-line, not-taken branches
+REGMAP_RP2040|5980|138|19|296|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2040|1157|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p1e-bench.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 94336 bytes into 369 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bench.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bench.uf2
+pmfc: uploading p1e-bench.uf2 (RP2040) through COM7
+> [UF2] p1e-bench.uf2 is a ready UF2: 369 blocks for the RP2040 (Pico / Pico W), family ID 0xE48BFF56, writing 0x10000000 to 0x100170FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM7 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM7 is still there 2.0 s after the 1200-baud touch (a program built before the touch existed does not answer it); sending the reset phrase.
+> [WARN] Could not open COM7 to send the reset command (the board may already be rebooting). Press BOOTSEL + reset manually if the drive does not appear.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RPI-RP2 (RP2040)...
+> [NATIVE UPLOADER] Found BOOTSEL drive at J:\
+> [NATIVE UPLOADER] Wrote p1e-bench.uf2 to J:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM7 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM7 at 9600 baud for 15 s (the port opened 1 ms after the upload, attempt 1).
+Z80 bench clk_sys kHz=200000 timed=0 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch instructions=1000000 us=245457 instructions/s=4074033
+alu instructions=1000000 us=271112 instructions/s=3688512
+memory instructions=1000000 us=199786 instructions/s=5005355
+ldir instructions=1000000 us=849381 instructions/s=1177327
+indexed instructions=1000000 us=282683 instructions/s=3537531
+call/stack instructions=1000000 us=380716 instructions/s=2626629
+register/branch instructions=1000000 us=244953 instructions/s=4082415
+alu instructions=1000000 us=271113 instructions/s=3688498
+memory instructions=1000000 us=199786 instructions/s=5005355
+ldir instructions=1000000 us=849380 instructions/s=1177329
+indexed instructions=1000000 us=282683 instructions/s=3537531
+call/stack instructions=1000000 us=380716 instructions/s=2626629
+register/branch instructions=1000000 us=244952 instructions/s=4082432
+alu instructions=1000000 us=271112 instructions/s=3688512
+memory instructions=1000000 us=199786 instructions/s=5005355
+ldir instructions=1000000 us=849381 instructions/s=1177327
+indexed instructions=1000000 us=282683 instructions/s=3537531
+call/stack instructions=1000000 us=380715 instructions/s=2626636
+register/branch instructions=1000000 us=244952 instructions/s=4082432
+alu instructions=1000000 us=271113 instructions/s=3688498
+memory instructions=1000000 us=199786 instructions/s=5005355
+ldir instructions=1000000 us=849381 instructions/s=1177327
+indexed instructions=1000000 us=282683 instructions/s=3537531
+
+pmfc: read COM7 for 15 s: 1532 bytes.
+pmfc: OK
+image ends at 0x10018700
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_bench_t.picow  ->  RP2040
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_W.board
+[TRACE]    ... parsing line 54168 of 54359
+> ReserveRegister: 5 reservation(s) on RP2040
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico line 50 (included)
+> F_CPU = 200000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2040): 51228 lines, 79 routines; core 0 reaches 39462 instructions, core 1 0, interrupt handlers 36 - r12 and r4-r7 hold
+pmfc: 51228 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bencht.uf2.asm
+> RP2040 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102736 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2040 ASSEMBLER: branch relaxation converged in 3 rounds.
+> RP2040 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2040 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bencht.cycles.txt
+> RP2040 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bencht.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2040|100068|2097152
+CYCLES_TOTAL_RP2040|58590|straight-line, not-taken branches
+REGMAP_RP2040|5983|138|19|296|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2040|1158|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p1e-bencht.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 100068 bytes into 391 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bencht.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-bencht.uf2
+pmfc: uploading p1e-bencht.uf2 (RP2040) through COM7
+> [UF2] p1e-bencht.uf2 is a ready UF2: 391 blocks for the RP2040 (Pico / Pico W), family ID 0xE48BFF56, writing 0x10000000 to 0x100186FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM7 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM7 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RPI-RP2 (RP2040)...
+> [NATIVE UPLOADER] Found BOOTSEL drive at J:\
+> [NATIVE UPLOADER] Wrote p1e-bencht.uf2 to J:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM7 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM7 at 9600 baud for 15 s (the port opened 2 ms after the upload, attempt 1).
+Z80 bench clk_sys kHz=200000 timed=1 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch T-states=10000010 us=334797 emulated kHz=29868
+alu T-states=10000002 us=572224 emulated kHz=17475
+memory T-states=10000000 us=286959 emulated kHz=34848
+ldir T-states=10000006 us=421363 emulated kHz=23732
+indexed T-states=10000011 us=295203 emulated kHz=33875
+call/stack T-states=10000006 us=348103 emulated kHz=28727
+register/branch T-states=10000010 us=334299 emulated kHz=29913
+alu T-states=10000002 us=572223 emulated kHz=17475
+memory T-states=10000000 us=286959 emulated kHz=34848
+ldir T-states=10000006 us=421363 emulated kHz=23732
+indexed T-states=10000011 us=295203 emulated kHz=33875
+call/stack T-states=10000006 us=348102 emulated kHz=28727
+register/branch T-states=10000010 us=334298 emulated kHz=29913
+alu T-states=10000002 us=572224 emulated kHz=17475
+memory T-states=10000000 us=286959 emulated kHz=34848
+ldir T-states=10000006 us=421363 emulated kHz=23732
+indexed T-states=10000011 us=295204 emulated kHz=33874
+call/stack T-states=10000006 us=348103 emulated kHz=28727
+register/branch T-states=10000010 us=334298 emulated kHz=29913
+alu T-states=10000002 us=572224 emulated kHz=17475
+memory T-states=10000000 us=286959 emulated kHz=34848
+ldir T-states=10000006 us=421363 emulated kHz=23732
+
+pmfc: read COM7 for 15 s: 1315 bytes.
+pmfc: OK
+image ends at 0x10047400
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_sst1.picow  ->  RP2040
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_W.board
+[TRACE]    ... parsing line 54170 of 60356
+> ReserveRegister: 5 reservation(s) on RP2040
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico line 50 (included)
+> F_CPU = 200000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2040): 63940 lines, 83 routines; core 0 reaches 40169 instructions, core 1 0, interrupt handlers 36 - r12 and r4-r7 hold
+pmfc: 63940 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst1.uf2.asm
+> RP2040 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2040 ASSEMBLER: branch relaxation converged in 3 rounds.
+> RP2040 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2040 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst1.cycles.txt
+> RP2040 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst1.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2040|291796|2097152
+CYCLES_TOTAL_RP2040|59707|straight-line, not-taken branches
+REGMAP_RP2040|6152|142|19|320|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2040|1163|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p1e-sst1.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 291796 bytes into 1140 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst1.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst1.uf2
+pmfc: uploading p1e-sst1.uf2 (RP2040) through COM7
+> [UF2] p1e-sst1.uf2 is a ready UF2: 1140 blocks for the RP2040 (Pico / Pico W), family ID 0xE48BFF56, writing 0x10000000 to 0x100473FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM7 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM7 left the bus after the 1200-baud touch (1.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RPI-RP2 (RP2040)...
+> [NATIVE UPLOADER] Found BOOTSEL drive at J:\
+> [NATIVE UPLOADER] Wrote p1e-sst1.uf2 to J:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM7 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM7 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 1 timed=1 shared=0 sabotage=0 clk_sys kHz=200000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 1 vectors=2648 failures=0 us=71792 PASS
+
+pmfc: read COM7 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10047400
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_sst2.picow  ->  RP2040
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_W.board
+[TRACE]    ... parsing line 60193 of 60356
+> ReserveRegister: 5 reservation(s) on RP2040
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico line 50 (included)
+> F_CPU = 200000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2040): 63940 lines, 83 routines; core 0 reaches 40169 instructions, core 1 0, interrupt handlers 36 - r12 and r4-r7 hold
+pmfc: 63940 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst2.uf2.asm
+> RP2040 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2040 ASSEMBLER: branch relaxation converged in 3 rounds.
+> RP2040 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2040 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst2.cycles.txt
+> RP2040 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst2.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2040|291776|2097152
+CYCLES_TOTAL_RP2040|59707|straight-line, not-taken branches
+REGMAP_RP2040|6152|142|19|320|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2040|1163|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p1e-sst2.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 291776 bytes into 1140 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst2.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst2.uf2
+pmfc: uploading p1e-sst2.uf2 (RP2040) through COM7
+> [UF2] p1e-sst2.uf2 is a ready UF2: 1140 blocks for the RP2040 (Pico / Pico W), family ID 0xE48BFF56, writing 0x10000000 to 0x100473FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM7 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM7 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RPI-RP2 (RP2040)...
+> [NATIVE UPLOADER] Found BOOTSEL drive at J:\
+> [NATIVE UPLOADER] Wrote p1e-sst2.uf2 to J:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM7 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM7 at 9600 baud for 12 s (the port opened 1 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 2 timed=1 shared=0 sabotage=0 clk_sys kHz=200000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 2 vectors=2377 failures=0 us=71834 PASS
+
+pmfc: read COM7 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10047400
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_sst3.picow  ->  RP2040
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_W.board
+[TRACE]    ... parsing line 54170 of 60357
+> ReserveRegister: 5 reservation(s) on RP2040
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico line 50 (included)
+> F_CPU = 200000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2040): 63942 lines, 83 routines; core 0 reaches 40169 instructions, core 1 0, interrupt handlers 36 - r12 and r4-r7 hold
+pmfc: 63942 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst3.uf2.asm
+> RP2040 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2040 ASSEMBLER: branch relaxation converged in 3 rounds.
+> RP2040 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2040 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst3.cycles.txt
+> RP2040 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst3.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2040|291812|2097152
+CYCLES_TOTAL_RP2040|59707|straight-line, not-taken branches
+REGMAP_RP2040|6152|142|19|320|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2040|1163|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p1e-sst3.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 291812 bytes into 1140 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst3.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst3.uf2
+pmfc: uploading p1e-sst3.uf2 (RP2040) through COM7
+> [UF2] p1e-sst3.uf2 is a ready UF2: 1140 blocks for the RP2040 (Pico / Pico W), family ID 0xE48BFF56, writing 0x10000000 to 0x100473FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM7 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM7 is still there 2.0 s after the 1200-baud touch (a program built before the touch existed does not answer it); sending the reset phrase.
+> [WARN] Could not open COM7 to send the reset command (the board may already be rebooting). Press BOOTSEL + reset manually if the drive does not appear.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RPI-RP2 (RP2040)...
+> [NATIVE UPLOADER] Found BOOTSEL drive at J:\
+> [NATIVE UPLOADER] Wrote p1e-sst3.uf2 to J:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM7 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM7 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 3 timed=1 shared=0 sabotage=0 clk_sys kHz=200000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 3 vectors=2422 failures=0 us=71882 PASS
+
+pmfc: read COM7 for 12 s: 272 bytes.
+pmfc: OK
+image ends at 0x10024500
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\tests\_sst4.picow  ->  RP2040
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_W.board
+[TRACE]    ... parsing line 54170 of 55880
+> ReserveRegister: 5 reservation(s) on RP2040
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico line 50 (included)
+> F_CPU = 200000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2040): 54988 lines, 83 routines; core 0 reaches 40169 instructions, core 1 0, interrupt handlers 36 - r12 and r4-r7 hold
+pmfc: 54988 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst4.uf2.asm
+> RP2040 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2040 ASSEMBLER: 86604 bytes of code run from SRAM at $20000000-$2001524B, copied from flash at boot; 102676 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2040 ASSEMBLER: branch relaxation converged in 3 rounds.
+> RP2040 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2040 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst4.cycles.txt
+> RP2040 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst4.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2040|148548|2097152
+CYCLES_TOTAL_RP2040|59707|straight-line, not-taken branches
+REGMAP_RP2040|6152|142|19|320|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2040|1163|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: p1e-sst4.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 148548 bytes into 581 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst4.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\p1e-sst4.uf2
+pmfc: uploading p1e-sst4.uf2 (RP2040) through COM7
+> [UF2] p1e-sst4.uf2 is a ready UF2: 581 blocks for the RP2040 (Pico / Pico W), family ID 0xE48BFF56, writing 0x10000000 to 0x100244FF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM7 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM7 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RPI-RP2 (RP2040)...
+> [NATIVE UPLOADER] Found BOOTSEL drive at J:\
+> [NATIVE UPLOADER] Wrote p1e-sst4.uf2 to J:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM7 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM7 at 9600 baud for 12 s (the port opened 2 ms after the upload, attempt 1).
+Z80 SingleStepTests batch 4 timed=1 shared=0 sabotage=0 clk_sys kHz=200000
+fields: 1 pc 2 sp 3 a 4 f 5 bc 6 de 7 hl 8 af' 9 bc' 10 de' 11 hl' 12 ix 13 iy 14 wz 15 i 16 r 17 im 18 iff 19 q 20 T-states 21 ports 22 memory
+SST batch 4 vectors=573 failures=0 us=18512 PASS
+
+pmfc: read COM7 for 12 s: 271 bytes.
+pmfc: OK
+
+

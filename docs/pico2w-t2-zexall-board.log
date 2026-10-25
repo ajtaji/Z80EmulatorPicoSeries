@@ -1,0 +1,83 @@
+=== chunk from test 0 10:53:42
+Z80 PureMetal clk_sys kHz=150000
+ZEXALL bytes=8704
+tests in table=67 running 0..66
+Z80 instruction exerciser
+<adc,sbc> hl,<bc,de,hl,sp>.... [58520 ms]  OK
+add hl,<bc,de,hl,sp>.......... [29130 ms]  OK
+add ix,<bc,de,ix,sp>.......... [29151 ms]  OK
+add iy,<bc,de,iy,sp>.......... [29151 ms]  OK
+aluop a,nn.................... [14657 ms]  OK
+aluop a,<b,c,d,e,h,l,(hl),a>.. [513926 ms]  OK
+aluop a,<ixh,ixl,iyh,iyl>..... [262268 ms]  OK
+aluop a,(<ix,iy>+1)........... [132331 ms]  OK
+bit n,(<ix,iy>+1)............. [1030 ms]  OK
+=== chunk from test 9 11:23:14
+=== chunk from test 9 11:50:42
+Z80 PureMetal clk_sys kHz=150000
+ZEXALL bytes=8704
+tests in table=67 running 9..66
+Z80 instruction exerciser
+bit n,<b,c,d,e,h,l,(hl),a>.... [33178 ms]  OK
+cpd<r>........................ [6460 ms]  OK
+cpi<r>........................ [6476 ms]  OK
+<daa,cpl,scf,ccf>............. [28214 ms]  OK
+<inc,dec> a................... [1524 ms]  OK
+<inc,dec> b................... [1524 ms]  OK
+<inc,dec> bc.................. [785 ms]  OK
+<inc,dec> c................... [1524 ms]  OK
+<inc,dec> d................... [1524 ms]  OK
+<inc,dec> de.................. [785 ms]  OK
+<inc,dec> e................... [1524 ms]  OK
+<inc,dec> h................... [1524 ms]  OK
+<inc,dec> hl.................. [785 ms]  OK
+<inc,dec> ix.................. [786 ms]  OK
+<inc,dec> iy.................. [786 ms]  OK
+<inc,dec> l................... [1524 ms]  OK
+<inc,dec> (hl)................ [1524 ms]  OK
+<inc,dec> sp.................. [785 ms]  OK
+<inc,dec> (<ix,iy>+1)......... [3197 ms]  OK
+<inc,dec> ixh................. [1526 ms]  OK
+<inc,dec> ixl................. [1526 ms]  OK
+<inc,dec> iyh................. [1526 ms]  OK
+<inc,dec> iyl................. [1526 ms]  OK
+ld <bc,de>,(nnnn)............. [15 ms]  OK
+ld hl,(nnnn).................. [7 ms]  OK
+ld sp,(nnnn).................. [7 ms]  OK
+ld <ix,iy>,(nnnn)............. [15 ms]  OK
+ld (nnnn),<bc,de>............. [35 ms]  OK
+ld (nnnn),hl.................. [7 ms]  OK
+ld (nnnn),sp.................. [7 ms]  OK
+ld (nnnn),<ix,iy>............. [35 ms]  OK
+ld <bc,de,hl,sp>,nnnn......... [30 ms]  OK
+ld <ix,iy>,nnnn............... [15 ms]  OK
+ld a,<(bc),(de)>.............. [22 ms]  OK
+ld <b,c,d,e,h,l,(hl),a>,nn.... [28 ms]  OK
+ld (<ix,iy>+1),nn............. [15 ms]  OK
+ld <b,c,d,e>,(<ix,iy>+1)...... [270 ms]  OK
+ld <h,l>,(<ix,iy>+1).......... [134 ms]  OK
+ld a,(<ix,iy>+1).............. [64 ms]  OK
+ld <ixh,ixl,iyh,iyl>,nn....... [15 ms]  OK
+ld <bcdehla>,<bcdehla>........ [2335 ms]  OK
+ld <bcdexya>,<bcdexya>........ [4815 ms]  OK
+ld a,(nnnn) / ld (nnnn),a..... [22 ms]  OK
+ldd<r> (1).................... [22 ms]  OK
+ldd<r> (2).................... [22 ms]  OK
+ldi<r> (1).................... [22 ms]  OK
+ldi<r> (2).................... [22 ms]  OK
+neg........................... [6649 ms]  OK
+<rrd,rld>..................... [3612 ms]  OK
+<rlca,rrca,rla,rra>........... [3073 ms]  OK
+shf/rot (<ix,iy>+1)........... [210 ms]  OK
+shf/rot <b,c,d,e,h,l,(hl),a>.. [4723 ms]  OK
+<set,res> n,<bcdehl(hl)a>..... [4716 ms]  OK
+<set,res> n,(<ix,iy>+1)....... [219 ms]  OK
+ld (<ix,iy>+1),<b,c,d,e>...... [619 ms]  OK
+ld (<ix,iy>+1),<h,l>.......... [134 ms]  OK
+ld (<ix,iy>+1),a.............. [31 ms]  OK
+ld (<bc,de>),a................ [48 ms]  OK
+Tests complete
+instructions=637 million + 0 us=132576872 instructions/s=4804791
+halt PC=0001 stopped=0
+ZEX ok=58 errors=0 PASS
+=== exerciser 1 finished 11:56:02

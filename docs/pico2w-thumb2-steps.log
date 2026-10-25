@@ -1,0 +1,220 @@
+# Thumb-2 variants before the final one (same benchmark programs, Pico 2 W, COM6)
+== base-p2
+Z80 bench clk_sys kHz=150000 timed=0 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch instructions=1000000 us=257133 instructions/s=3889037
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794460 instructions/s=1258716
+indexed instructions=1000000 us=303521 instructions/s=3294664
+call/stack instructions=1000000 us=328573 instructions/s=3043463
+register/branch instructions=1000000 us=256623 instructions/s=3896766
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794461 instructions/s=1258715
+indexed instructions=1000000 us=303521 instructions/s=3294664
+call/stack instructions=1000000 us=328573 instructions/s=3043463
+register/branch instructions=1000000 us=256622 instructions/s=3896782
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794460 instructions/s=1258716
+indexed instructions=1000000 us=303522 instructions/s=3294654
+call/stack instructions=1000000 us=328573 instructions/s=3043463
+register/branch instructions=1000000 us=256622 instructions/s=3896782
+alu instructions=1000000 us=289631 instructions/s=3452669
+memory instructions=1000000 us=208578 instructions/s=4794369
+ldir instructions=1000000 us=794460 instructions/s=1258716
+indexed instructions=1000000 us=303521 instructions/s=3294664
+Z80 bench clk_sys kHz=150000 timed=1 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch T-states=10000010 us=329659 emulated kHz=30334
+alu T-states=10000002 us=589631 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390433 emulated kHz=25612
+indexed T-states=10000011 us=310372 emulated kHz=32219
+call/stack T-states=10000006 us=294517 emulated kHz=33953
+register/branch T-states=10000010 us=329160 emulated kHz=30380
+alu T-states=10000002 us=589631 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390434 emulated kHz=25612
+indexed T-states=10000011 us=310372 emulated kHz=32219
+call/stack T-states=10000006 us=294517 emulated kHz=33953
+register/branch T-states=10000010 us=329161 emulated kHz=30380
+alu T-states=10000002 us=589632 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390433 emulated kHz=25612
+indexed T-states=10000011 us=310372 emulated kHz=32219
+call/stack T-states=10000006 us=294516 emulated kHz=33954
+register/branch T-states=10000010 us=329160 emulated kHz=30380
+alu T-states=10000002 us=589631 emulated kHz=16959
+memory T-states=10000000 us=287093 emulated kHz=34831
+ldir T-states=10000006 us=390434 emulated kHz=25612
+indexed T-states=10000011 us=310372 emulated kHz=32219
+== t2a-p2
+Z80 bench clk_sys kHz=150000 timed=0 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch instructions=1000000 us=240488 instructions/s=4158211
+alu instructions=1000000 us=275557 instructions/s=3629013
+memory instructions=1000000 us=196197 instructions/s=5096917
+ldir instructions=1000000 us=799446 instructions/s=1250866
+indexed instructions=1000000 us=290765 instructions/s=3439203
+call/stack instructions=1000000 us=314288 instructions/s=3181795
+register/branch instructions=1000000 us=239975 instructions/s=4167100
+alu instructions=1000000 us=275557 instructions/s=3629013
+memory instructions=1000000 us=196197 instructions/s=5096917
+ldir instructions=1000000 us=799445 instructions/s=1250867
+indexed instructions=1000000 us=290765 instructions/s=3439203
+call/stack instructions=1000000 us=314287 instructions/s=3181805
+register/branch instructions=1000000 us=239975 instructions/s=4167100
+alu instructions=1000000 us=275557 instructions/s=3629013
+memory instructions=1000000 us=196197 instructions/s=5096917
+ldir instructions=1000000 us=799446 instructions/s=1250866
+indexed instructions=1000000 us=290765 instructions/s=3439203
+call/stack instructions=1000000 us=314287 instructions/s=3181805
+register/branch instructions=1000000 us=239975 instructions/s=4167100
+alu instructions=1000000 us=275557 instructions/s=3629013
+memory instructions=1000000 us=196197 instructions/s=5096917
+ldir instructions=1000000 us=799445 instructions/s=1250867
+indexed instructions=1000000 us=290766 instructions/s=3439191
+call/stack instructions=1000000 us=314287 instructions/s=3181805
+Z80 bench clk_sys kHz=150000 timed=1 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch T-states=10000010 us=312976 emulated kHz=31951
+alu T-states=10000002 us=565928 emulated kHz=17670
+memory T-states=10000000 us=269311 emulated kHz=37131
+ldir T-states=10000006 us=381700 emulated kHz=26198
+indexed T-states=10000011 us=289681 emulated kHz=34520
+call/stack T-states=10000006 us=286077 emulated kHz=34955
+register/branch T-states=10000010 us=312478 emulated kHz=32002
+alu T-states=10000002 us=565928 emulated kHz=17670
+memory T-states=10000000 us=269310 emulated kHz=37131
+ldir T-states=10000006 us=381701 emulated kHz=26198
+indexed T-states=10000011 us=289681 emulated kHz=34520
+call/stack T-states=10000006 us=286077 emulated kHz=34955
+register/branch T-states=10000010 us=312478 emulated kHz=32002
+alu T-states=10000002 us=565928 emulated kHz=17670
+memory T-states=10000000 us=269310 emulated kHz=37131
+ldir T-states=10000006 us=381701 emulated kHz=26198
+indexed T-states=10000011 us=289681 emulated kHz=34520
+call/stack T-states=10000006 us=286078 emulated kHz=34955
+register/branch T-states=10000010 us=312478 emulated kHz=32002
+alu T-states=10000002 us=565928 emulated kHz=17670
+memory T-states=10000000 us=269311 emulated kHz=37131
+ldir T-states=10000006 us=381700 emulated kHz=26198
+indexed T-states=10000011 us=289681 emulated kHz=34520
+call/stack T-states=10000006 us=286078 emulated kHz=34955
+== t2c-p2
+Z80 bench clk_sys kHz=150000 timed=0 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch instructions=1000000 us=184669 instructions/s=5415094
+alu instructions=1000000 us=205186 instructions/s=4873626
+memory instructions=1000000 us=197882 instructions/s=5053516
+ldir instructions=1000000 us=792785 instructions/s=1261376
+indexed instructions=1000000 us=293457 instructions/s=3407654
+call/stack instructions=1000000 us=315240 instructions/s=3172186
+register/branch instructions=1000000 us=184148 instructions/s=5430414
+alu instructions=1000000 us=205186 instructions/s=4873626
+memory instructions=1000000 us=197882 instructions/s=5053516
+ldir instructions=1000000 us=792785 instructions/s=1261376
+indexed instructions=1000000 us=293458 instructions/s=3407642
+call/stack instructions=1000000 us=315240 instructions/s=3172186
+register/branch instructions=1000000 us=184147 instructions/s=5430444
+alu instructions=1000000 us=205186 instructions/s=4873626
+memory instructions=1000000 us=197882 instructions/s=5053516
+ldir instructions=1000000 us=792786 instructions/s=1261374
+indexed instructions=1000000 us=293458 instructions/s=3407642
+call/stack instructions=1000000 us=315239 instructions/s=3172196
+register/branch instructions=1000000 us=184147 instructions/s=5430444
+alu instructions=1000000 us=205187 instructions/s=4873603
+memory instructions=1000000 us=197881 instructions/s=5053542
+ldir instructions=1000000 us=792785 instructions/s=1261376
+indexed instructions=1000000 us=293458 instructions/s=3407642
+call/stack instructions=1000000 us=315240 instructions/s=3172186
+Z80 bench clk_sys kHz=150001 timed=1 asm=1 shared=0 hooks=0 q=1 trackR=1
+register/branch T-states=10000010 us=237973 emulated kHz=42021
+alu T-states=10000002 us=425187 emulated kHz=23519
+memory T-states=10000000 us=268264 emulated kHz=37276
+ldir T-states=10000006 us=377734 emulated kHz=26473
+indexed T-states=10000011 us=295193 emulated kHz=33876
+call/stack T-states=10000006 us=282702 emulated kHz=35372
+register/branch T-states=10000010 us=237463 emulated kHz=42111
+alu T-states=10000002 us=425187 emulated kHz=23519
+memory T-states=10000000 us=268265 emulated kHz=37276
+ldir T-states=10000006 us=377734 emulated kHz=26473
+indexed T-states=10000011 us=295193 emulated kHz=33876
+call/stack T-states=10000006 us=282702 emulated kHz=35372
+register/branch T-states=10000010 us=237462 emulated kHz=42112
+alu T-states=10000002 us=425187 emulated kHz=23519
+memory T-states=10000000 us=268264 emulated kHz=37276
+ldir T-states=10000006 us=377734 emulated kHz=26473
+indexed T-states=10000011 us=295193 emulated kHz=33876
+call/stack T-states=10000006 us=282702 emulated kHz=35372
+register/branch T-states=10000010 us=237463 emulated kHz=42111
+alu T-states=10000002 us=425187 emulated kHz=23519
+memory T-states=10000000 us=268264 emulated kHz=37276
+ldir T-states=10000006 us=377734 emulated kHz=26473
+indexed T-states=10000011 us=295192 emulated kHz=33876
+call/stack T-states=10000006 us=282702 emulated kHz=35372
+
+> RP2350 ASSEMBLER: 73552 bytes of code run from SRAM at $20000000-$20011F4F, copied from flash at boot; 381488 bytes 
+of SRAM left free, stacks and reserved windows excluded.
+image ends at 0x10014D00
+image ends at 0x10014D00
+pmfc: C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\basep2\tests\_p2benchmp.pico2w  ->  RP2350
+pmfc: pin aliases from Boards/Raspberry_Pi_Pico_2_W.board
+[TRACE]    ... parsing line 55095 of 55286
+> ReserveRegister: 5 reservation(s) on RP2350
+> RESERVE Z80PC -> r4 (.i, 4 bytes, reg 4, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80F -> r5 (.i, 4 bytes, reg 5, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80A -> r8 (.i, 4 bytes, reg 8, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80ICount -> r10 (.i, 4 bytes, reg 10, span 1) at z80.pico2 line 50 (included)
+> RESERVE Z80Left -> r11 (.i, 4 bytes, reg 11, span 1) at z80.pico2 line 50 (included)
+> F_CPU = 150000000 Hz, from the board's ClockSpeed - delay_ms and the baud divisors follow it.
+> ReserveRegister proof (RP2350): 45103 lines, 76 routines; core 0 reaches 32566 instructions, core 1 0, interrupt handlers 20 - r12 and r4-r7 hold
+pmfc: 45103 lines of assembly
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\basep2\mp.uf2.asm
+> RP2350 ASSEMBLER: Starting Pass 1 (Resolving Labels)...
+> RP2350 ASSEMBLER: 73552 bytes of code run from SRAM at $20000000-$20011F4F, copied from flash at boot; 381488 bytes of SRAM left free, stacks and reserved windows excluded.
+> RP2350 ASSEMBLER: branch relaxation converged in 4 rounds.
+> RP2350 ASSEMBLER: Starting Pass 2 (Generating Machine Code)...
+> RP2350 ASSEMBLER: Wrote cycle-timing listing to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\basep2\mp.cycles.txt
+> RP2350 ASSEMBLER: Writing raw binary to C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\basep2\mp.uf2
+[TELEMETRY_START]
+ROM_TOTAL_RP2350|85120|4194304
+CYCLES_TOTAL_RP2350|51324|straight-line, not-taken branches
+REGMAP_RP2350|6041|89|18|317|materialisations seen|already in dest|already in another reg|nearby constant
+SLOTMAP_RP2350|901|frame-slot loads taken from a register
+[TELEMETRY_END]
+pmfc: mp.uf2 is named .uf2, so the image is written as a UF2, exactly as an upload packs it: Packed 85120 bytes into 333 blocks -> C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\basep2\mp.uf2
+pmfc: wrote C:\Users\ajtaj\Desktop\Github\Z80EmulatorPicoSeries\build\basep2\mp.uf2
+pmfc: uploading mp.uf2 (RP2350) through COM6
+> [UF2] mp.uf2 is a ready UF2: 333 blocks for the RP2350's Arm cores (Pico 2 / Pico 2 W), family ID 0xE48BFF59, writing 0x10000000 to 0x10014CFF. It is sent exactly as it is: it is not packed again, and the file is not changed.
+> [NATIVE UPLOADER] Sending BOOTSEL reset command to COM6 (the 1200-baud touch)...
+> [NATIVE UPLOADER] COM6 left the bus after the 1200-baud touch (0.0 s): the board is going to its boot loader.
+> [NATIVE UPLOADER] Waiting for matching BOOTSEL drive: RP2350 (Pico 2)...
+> [NATIVE UPLOADER] The boot drive at I:\ carries the board's serial 3D00D889CF7F499A.
+> [NATIVE UPLOADER] Found BOOTSEL drive at I:\
+> [NATIVE UPLOADER] Wrote mp.uf2 to I:\
+> [NATIVE UPLOADER] FLASH COMPLETE! Board will reboot into the new firmware automatically.
+> [NATIVE UPLOADER] Serial monitor: board found on COM6 (USB vendor ID 2E8A), on the same USB connection it was flashed through.
+pmfc: reading COM6 at 9600 baud for 15 s (the port opened 2 ms after the upload, attempt 1).
+Z80 bench clk_sys kHz=150000 timed=1 asm=1 shared=1 hooks=1 q=1 trackR=1
+register/branch T-states=10000010 us=346305 emulated kHz=28876
+alu T-states=10000002 us=617780 emulated kHz=16186
+memory T-states=10000000 us=344061 emulated kHz=29064
+ldir T-states=10000006 us=444385 emulated kHz=22503
+indexed T-states=10000011 us=366538 emulated kHz=27282
+call/stack T-states=10000006 us=450635 emulated kHz=22190
+register/branch T-states=10000010 us=345811 emulated kHz=28917
+alu T-states=10000002 us=617779 emulated kHz=16187
+memory T-states=10000000 us=344061 emulated kHz=29064
+ldir T-states=10000006 us=444385 emulated kHz=22503
+indexed T-states=10000011 us=366539 emulated kHz=27282
+call/stack T-states=10000006 us=450634 emulated kHz=22190
+register/branch T-states=10000010 us=345812 emulated kHz=28917
+alu T-states=10000002 us=617780 emulated kHz=16186
+memory T-states=10000000 us=344062 emulated kHz=29064
+ldir T-states=10000006 us=444386 emulated kHz=22502
+indexed T-states=10000011 us=366539 emulated kHz=27282
+call/stack T-states=10000006 us=450634 emulated kHz=22190
+register/branch T-states=10000010 us=345811 emulated kHz=28917
+
+pmfc: read COM6 for 15 s: 1155 bytes.
+pmfc: OK
+
+
