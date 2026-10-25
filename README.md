@@ -235,7 +235,7 @@ Proof of the Thumb-2 build on the Pico 2 W: SingleStepTests, all 8,020 vectors,
 in four builds - timed, untimed, timed with hooks compiled in, and timed with
 every page hooked (`#SST_HOOK_ALL = 1`, which sends every memory handler down
 its PureMetal fall-back): 0 failures in each. API / interrupt checks timed and
-untimed: 19 / 18, 0 failures. ZEXDOC and ZEXALL: 67 of 67 OK, 0 errors each (alu8r 514 s against 660 s before; the tests after it at 4.80 M instructions/s against 3.74 M).
+untimed: 19 / 18, 0 failures. ZEXDOC and ZEXALL: 67 of 67 OK, 0 errors each (the same tests, before and after: adc16 75.0 s -> 58.5 s, alu8r 660 s -> 514 s).
 Logs: `docs/pico2w-thumb2-board.log`, `docs/pico2w-t2-zexdoc-board.log`,
 `docs/pico2w-t2-zexall-board.log`. The RP2040 with this compiler: the same
 benchmark figures to the digit and all 8,020 SST vectors (`docs/picow-883c4ae12-board.log`).
