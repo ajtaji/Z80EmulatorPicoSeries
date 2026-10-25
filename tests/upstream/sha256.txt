@@ -1,4 +1,2 @@
 6e2da55147a04f28d303d5da6a1e6b771557ac244653590a0f24a2d39c8537e8 *tests/upstream/zexall.com
 34923a7ed82285d3038b2d54bd64899e12173eebb61f9d07b4fc72e78af2ae8f *tests/upstream/zexdoc.com
-495f686b3f4418d50a110ba6ae4c6d86d715506e1eb6117040bd6f1eb4e011c5 *tests/upstream/zexall.z80
-4f7b83d5ed1b4ce34f1b6f19b996e40588e3698db9aa2e31bece377db5b91d99 *tests/upstream/zexdoc.z80

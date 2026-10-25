@@ -1,45 +1,130 @@
-# Z80 on the Pico series — PureMetal
+# Z80 Emulator for the Raspberry Pi Pico series
 
-A Zilog Z80 (NMOS) CPU core for the Raspberry Pi Pico W (RP2040) and Pico 2 W
-(RP2350, Arm), written in PureMetal. One SRAM-resident procedure, `Z80Run`,
-dispatches through 256-entry `.Label` tables (base, CB, ED, DD, FD) and a
-32-entry DDCB/FDCB group table; every handler ends in its own computed-jump
-tail (or a shared one, `#Z80_SHARED_TAIL = 1`).
+A fast, complete **Zilog Z80** CPU core for the **Raspberry Pi Pico W (RP2040)**
+and **Pico 2 W (RP2350)**, written in **PureMetal**, with the same core on the
+desktop (Windows, PureBasic) behind a debugger window. It runs every documented
+and undocumented instruction with exact flags and T-state counts, passes
+ZEXDOC, ZEXALL and 8,020 SingleStepTests vectors **on the boards themselves**,
+and runs 2.6–6.6 million Z80 instructions per second on a Pico, which is
+**5 to 14 times the speed of a real 3.5 MHz Z80**, depending on the code. It is a CPU core for building
+machines on (arcade boards, home computers, CP/M systems), with a small, clean
+API for memory, I/O ports and interrupts.
 
-Covered: every documented and undocumented opcode (IXH/IXL/IYH/IYL, SLL,
-DDCB/FDCB register copies, ED mirrors), undocumented X/Y flags, MEMPTR (WZ),
-the Q latch behind SCF/CCF's X/Y bits, block instructions including the
-repeat-interrupted X/Y/H/P flag behaviour, IM 0/1/2, NMI, HALT, the EI delay,
-the R register, and T-state counts (switchable timed / untimed build).
+![The desktop debugger after a full ZEXALL run](docs/desktop-window-zexall.png)
 
-Generated source: `src/z80.pico` (Pico W) and `src/z80.pico2` (Pico 2 W),
-from `tools/gen_z80.py`. Edit the generator, then `py -3 tools/gen_z80.py`.
+## Features
 
-**On the PC:** `desktop/` holds the same core in PureBasic (generated from the same
-handlers, same API) with a Neon Arcade window and console test runners; it passes the
-same suites. See `desktop/README.md`.
+- **Every opcode:** base, CB, ED, DD/FD (IX, IY, IXH/IXL/IYH/IYL), DDCB/FDCB
+  including the undocumented register copies, SLL, the ED mirrors and NOPs.
+- **Exact flags:** undocumented X/Y (bits 3 and 5), MEMPTR (WZ) and the Q latch
+  behind SCF/CCF. Block instructions include the X/Y/H/P behaviour of an
+  interrupted LDIR/CPIR/INIR/OTIR.
+- **Interrupts:** IM 0 (RST), IM 1, IM 2 with the bus byte, NMI, HALT, the EI
+  delay, the R register.
+- **Timing:** a timed build counts T-states per instruction (budgets in
+  T-states, for machines that must keep real time). An untimed build counts
+  instructions.
+- **Fast dispatch:** computed-goto through 256-entry label tables, with every
+  handler in SRAM ending in its own dispatch tail. On the **RP2350 the tails
+  and 193 hot handlers are hand-written Thumb-2** (Cortex-M33); the RP2040
+  build is Thumb-1.
+- **Machine-friendly:** a flat 64 KB memory plus optional per-page read/write
+  hooks (ROM, mirrors, memory-mapped I/O), 16-bit I/O port hooks,
+  run-for-N-T-states, interrupt request lines.
+- **Desktop twin:** the same core, generated from the same handler source, in
+  a PureBasic program with registers, disassembly, memory, breakpoints and a
+  CP/M console (`desktop/`).
 
-## Using the core (the API)
+## Supported boards
 
-Define every switch, then include the core:
+| Board | Chip | Status |
+|---|---|---|
+| Raspberry Pi Pico W | RP2040 (Cortex-M0+), 200 MHz | all tests pass on the board |
+| Raspberry Pi Pico 2 W | RP2350 (Cortex-M33), 150 MHz | all tests pass on the board, Thumb-2 build |
+| Pico / Pico 2 without wireless, Pimoroni Pico Plus 2 W, Adafruit Feather RP2350 | RP2040 / RP2350 | expected to work (same chips, USB serial only); not tested |
+
+The core needs no display, audio or wireless; the test and benchmark programs
+talk over the board's USB serial port.
+
+## Performance
+
+Measured on the boards, untimed build, guest instructions per second
+(1,000,000 per sample; a prefixed instruction counts once, LDIR counts each repeat):
+
+| Mix | Pico W, 200 MHz | Pico 2 W, 150 MHz (Thumb-2) |
+|---|---:|---:|
+| register/branch (DEC C / JR NZ / DJNZ) | 4.08 M | 5.44 M |
+| ALU (ADD, XOR, RLCA, AND, OR, SUB, ADC, CP n) | 3.69 M | 5.23 M |
+| memory (LD A,(HL) / INC HL / LD (DE),A / INC (HL)) | 5.01 M | 6.60 M |
+| LDIR (per repeat) | 1.18 M | 1.28 M |
+| indexed ((IX+d), (IY+d), BIT n,(IY+d)) | 3.54 M | 3.93 M |
+| CALL / PUSH / POP / RET | 2.63 M | 4.65 M |
+
+Timed builds, in emulated MHz (T-states per second):
+
+| Mix | Pico W | Pico 2 W (Thumb-2) | Pico 2 W, timed + memory hooks + shared tail (arcade-machine build) |
+|---|---:|---:|---:|
+| register/branch | 29.9 | 43.5 | 42.8 |
+| ALU | 17.5 | 25.3 | 24.6 |
+| memory | 34.8 | 47.4 | 41.0 |
+| LDIR | 23.7 | 26.3 | 22.7 |
+| indexed | 33.9 | 38.8 | 32.8 |
+| call/stack | 28.7 | 49.4 | 36.8 |
+
+A 3.072 MHz arcade Z80 therefore needs about a fifth of one core or less,
+leaving the rest for video and sound (a machine typically runs the CPU on
+core 0 and video/audio on core 1).
+
+**Thumb-2 on the RP2350.** The tails branch with one
+`ldr pc, [table, op, lsl #2]` and step the budget with one `subs.w`. The 193
+hottest base-page handlers are written in Thumb-2 (`tools/t2_handlers.py`).
+Against the same core in Thumb-1 on the same board: +40% register/branch,
++52% ALU, +38% memory, +53% call/stack. Raw logs: `docs/pico2w-thumb2-*.log`.
+
+**Desktop** (Intel i9-11900K): ZEXDOC and ZEXALL in about 13 s each, about
+3,500 emulated MHz timed and 440–480 M instructions/s untimed. Labels-as-values
+dispatch through the C back end is about 30% faster than a procedure-pointer
+table built from the same handlers (`docs/desktop-dispatch-bench.log`).
+
+## Quick start (ready firmware)
+
+Prebuilt images are in `firmware/`. Each file is the exact image whose run on a
+board is in `docs/`; checksums are in `firmware/SHA256SUMS`.
+
+| File | Board | What it does |
+|---|---|---|
+| `z80-bench-picow.uf2` | Pico W | instruction-mix benchmark, repeats every few seconds |
+| `z80-bench-pico2w.uf2` | Pico 2 W | the same, Thumb-2 build |
+| `z80-api-picow.uf2` | Pico W | interrupt / API self-checks, prints PASS or FAIL |
+| `z80-api-pico2w.uf2` | Pico 2 W | the same |
+
+1. Hold **BOOTSEL** on the board while plugging it in; it appears as a USB
+   drive (`RPI-RP2` or `RP2350`).
+2. Copy the `.uf2` onto that drive. The board reboots into it.
+3. Open the board's USB serial port within 30 seconds (any baud rate; for
+   example PuTTY, `screen`, or the PureMetal Forge serial monitor). The program
+   waits for the port to open, then prints its results.
+
+## Using the core in a PureMetal program
+
+Define every switch, then include the core for your chip:
 
 ```text
-#Z80_TIMED       = 1   ; Z80Run's budget and result are T-states (0: whole instructions)
-#Z80_ASM_TAIL    = 1   ; inline-assembly dispatch tail (0: plain computed Goto)
-#Z80_SHARED_TAIL = 0   ; 1: one shared tail - smaller SRAM code, slightly slower
+#Z80_TIMED       = 1   ; budget and result in T-states (0: whole instructions)
+#Z80_ASM_TAIL    = 1   ; assembly dispatch tails (0: plain computed Goto)
+#Z80_SHARED_TAIL = 0   ; 1: one shared tail - smaller SRAM code, a little slower
 #Z80_MEM_HOOKS   = 1   ; per-page data read/write hooks (0: flat 64 KB only)
-#Z80_Q           = 1   ; model Q for SCF/CCF X/Y (0: X/Y = (F | A), saves a store per flag op)
+#Z80_Q           = 1   ; model Q for SCF/CCF X/Y (0: X/Y = (F | A))
 #Z80_TRACK_R     = 1   ; exact R in timed builds (0: LD A,R stops the CPU, Z80Error = 3)
-XIncludeFile "z80.pico"          ; z80.pico2 on the Pico 2 W
+XIncludeFile "src/z80.pico"      ; src/z80.pico2 on the RP2350
 ```
 
-PureMetal has no `Defined()`, so a missing switch is a compile error naming it.
+A missing switch is a compile error naming it. The core keeps its hottest state
+in registers for the whole program, so a machine must not reserve them:
+**r4 Z80PC, r5 Z80F, r8 Z80A, r10 Z80ICount, r11 Z80Left**, plus **r9 Z80QM**
+on the RP2350. Keep the CPU on one core.
 
-The core holds five Globals in registers for the whole program:
-**r4 `Z80PC`, r5 `Z80F`, r8 `Z80A`, r10 `Z80ICount`, r11 `Z80Left`**. A
-machine must not reserve those registers, and keeps the CPU on one core.
-
-### The machine supplies
+### What the machine supplies
 
 ```text
 Procedure.i Z80PortIn(port.i)            ; return 0..255
@@ -49,206 +134,151 @@ ProcedureRAM.i Z80MemRead(addr.i)        ; return 0..255
 ProcedureRAM Z80MemWrite(addr.i, value.i)
 ```
 
-`port` is the full 16-bit address bus value, as on the chip: `IN A,(n)` and
-`OUT (n),A` put A on the high byte (`A << 8 | n`), `IN r,(C)`/`OUT (C),r` and
-the block I/O instructions put BC. Pac-Man hardware sets its IM 2 vector with
-`OUT (0),A`: test `port & 255`.
-
-Mark the memory hooks `ProcedureRAM`: `Z80Run` is in SRAM, and a call from
-SRAM into flash is a long call through a veneer.
+`port` is the full 16-bit bus value, as on the chip. `IN A,(n)` and `OUT (n),A`
+put A on the high byte (`A << 8 | n`); `IN r,(C)`, `OUT (C),r` and the block
+I/O instructions put BC. Mark the memory hooks `ProcedureRAM`: `Z80Run` runs
+from SRAM, and a call from SRAM into flash is a long call.
 
 ### Memory
 
-- `Z80Mem.a(65536)` is the flat 64 KB the CPU sees. **Opcode and operand
-  fetches always read `Z80Mem` directly**, never a hook.
+- `Z80Mem.a(65536)` is the flat 64 KB the CPU sees. Opcode and operand
+  fetches always read it directly, never a hook.
 - With `#Z80_MEM_HOOKS = 1`, `Z80PageRd.a(256)` and `Z80PageWr.a(256)` flag
   256-byte pages (index `addr >> 8`). A data read from a flagged page calls
-  `Z80MemRead(addr)`; a data write to a flagged page calls
-  `Z80MemWrite(addr, value)` and does not touch `Z80Mem` (the hook decides:
-  ignore a ROM write, latch an I/O register, write a mirror). Unflagged pages
-  are plain `Z80Mem` reads and writes. Stack pushes and pops are data
-  accesses and go through the hooks.
-- ROM banking or overlays: copy the bytes into `Z80Mem`. Fetches cannot be
-  trapped, so a latch that real hardware toggles on an opcode fetch (the
-  Ms. Pac-Man auxiliary board's decode latch) is the machine's to emulate,
-  for example by applying the overlay permanently or between `Z80Run` calls.
+  `Z80MemRead(addr)`. A data write to a flagged page calls
+  `Z80MemWrite(addr, value)` instead of writing `Z80Mem`, so the hook can
+  ignore a ROM write, latch an I/O register or write a mirror. Stack pushes and
+  pops are data accesses and go through the hooks.
+- For ROM banking or overlays, copy the bytes into `Z80Mem`.
 
 ### Running and interrupts
 
 ```text
 Z80Reset()                 ; power-on state (PC 0, SP $FFFF, AF $FFFF, IM 0, DI); memory untouched
-used = Z80Run(n)           ; run n T-states (timed) or n instructions (untimed)
-Z80IntRequest(data)        ; INT held until accepted, then cleared (HOLD_LINE)
+used = Z80Run(n)           ; run n T-states (timed) or n instructions (untimed); returns what was used
+Z80IntRequest(byte)        ; INT, held until accepted (the IM 2 vector low byte, or an RST opcode for IM 0)
 Z80IntClear()              ; drop a request that was never accepted
-Z80NmiRequest()            ; NMI (edge)
+Z80NmiRequest()            ; NMI
 r = Z80GetR() : Z80SetR(r) ; R outside Z80Run
 ```
 
-- `Z80Run` returns the units actually used. A timed run can end up to one
-  instruction past `n`; carry the overshoot into the next frame. `Z80TStates`
-  accumulates every T-state run (timed builds).
-- `data` is the byte on the bus at acknowledge: the low byte of the IM 2
-  vector address (`I << 8 | data`), or an RST opcode in IM 0. IM 0 with any
-  byte other than an RST stops the CPU (`Z80Stopped = 1`, `Z80Error = 2`) —
-  that form is not modelled. IM 1 is RST 38h.
-- Requests are sampled when `Z80Run` starts, after the instruction that
-  follows `EI` (the window is split there and resumed), and when `HALT`
-  executes. A request raised by a hook inside a run is seen at the next of
-  those points.
-- `HALT` executes NOPs (4 T-states and one R step each) for the rest of the
-  run; `Z80Halted` is 1 until an interrupt is accepted. The return address
-  pushed is the instruction after `HALT`.
-- Registers are Globals: `Z80PC Z80SP Z80A Z80F Z80BC Z80DE Z80HL Z80IX
-  Z80IY Z80WZ Z80AF2 Z80BC2 Z80DE2 Z80HL2 Z80I Z80IM Z80IFF1 Z80IFF2`
-  (pairs hold 0..65535; the primed AF is `A << 8 | F`).
+- **Overshoot:** a timed run can end up to one instruction past `n`. Carry the
+  overshoot into the next frame. `Z80TStates` accumulates the total.
+- **When requests are seen:** at `Z80Run` entry, after the instruction that
+  follows `EI`, and at `HALT`.
+- **IM 0:** only an RST bus byte is modelled. Any other byte stops the CPU
+  with `Z80Error = 2`, rather than guessing.
+- **HALT:** it executes NOPs for the rest of the run, and `Z80Halted` stays 1
+  until an interrupt is accepted.
+- **Registers:** the registers are Globals: `Z80PC Z80SP Z80A Z80F Z80BC Z80DE
+  Z80HL Z80IX Z80IY Z80WZ Z80AF2 Z80BC2 Z80DE2 Z80HL2 Z80I Z80IM Z80IFF1
+  Z80IFF2`.
 
-## Verification (physical Pico W, COM7, 200 MHz)
+## Building from source
 
-No host emulator executes the firmware; every result below is the board's own
-serial output, captured in `docs/`.
+You need **PureMetal Forge** (the IDE application, used headless with
+`--compile`), a build of 2026-10-25 or later for the RP2350's Thumb-2 inline
+assembly, and Python 3 for the generators.
 
-| Check | Builds | Result |
-|---|---|---|
-| SingleStepTests, 8,020 one-instruction vectors (`tests/sst*`) | timed and untimed, per-handler and shared tails | 0 failures in all four builds |
-| Planted fault in the checker (`#SST_SABOTAGE = 1`) | timed | caught: vector 100, F |
-| Interrupt / API checks (`tests/api*`) | timed and untimed, both tails, memory hooks on | 19 / 18 checks, 0 failures |
-| ZEXDOC (`tests/zex.picow`) | untimed, per-handler tail | 67 of 67 OK, 0 errors |
-| ZEXALL (`tests/zex.picow`, `#ZEX_ALL = 1`) | untimed, per-handler tail | 67 of 67 OK, 0 errors |
+```powershell
+# the cores are generated - edit tools/gen_z80.py (and tools/t2_handlers.py), then:
+py -3 tools/gen_z80.py                  # writes src/z80.pico and src/z80.pico2
 
-- SingleStepTests: the first five vectors of each of the 1,604 opcode files
-  (`tests/upstream/sst`, MIT), in four batches. Each vector sets the whole
-  CPU and memory, runs one instruction with `Z80Run(1)` and compares every
-  register, R, WZ, Q, IFF1/2, IM, memory, port traffic and (timed) the
-  instruction's T-states.
-- API checks: run budgets and timed overshoot, R across windows, IM 1 held
-  request, the EI delay, EI as the last instruction of a window, IM 2 vector,
-  IM 0 RST and IM 0 non-RST (stops with `Z80Error = 2`), NMI and RETN, HALT
-  using the budget and waking, IN/OUT port values, read/write hooks and a
-  PUSH through a hooked page.
-- ZEXDOC/ZEXALL (Frank D. Cringle, GPL v2, `tests/upstream`) run under a
-  minimal CP/M BDOS (functions 2 and 9 through `OUT (0),A` at `$FE00`, warm
-  boot = `HALT` at 0). One full run takes about 30 minutes on the Pico W, so
-  `tools/zex_chunks.sh` runs it in board leases (the recorded runs used leases of at most
-  18 minutes; the script now uses `lease.ps1` and 15-minute leases), each
-  booting the exerciser at the first test the previous lease did not finish.
-  Logs: `docs/zexdoc-board.log`, `docs/zexall-board.log`; SST/API/bench:
-  `docs/board-sst-timed-untimed.log`, `docs/board-sst-shared-api-bench.log`,
-  `docs/board-sst-planted-fault.log`.
+# build one program (PowerShell)
+$env:PUREMETAL_FORGE = 'C:\path\to\PureMetalForge.exe'
+.\tools\build.ps1 -Source tests/bench.picow -Output build/bench.uf2
 
-## Speed (physical Pico W, 200 MHz)
-
-Untimed builds: guest instructions per second, 1,000,000 instructions per
-sample (a prefixed instruction counts once; LDIR counts each repeat).
-
-| Mix | per-handler asm tail (default) | shared tail | plain PureMetal `Goto` |
-|---|---:|---:|---:|
-| register/branch (DEC C / JR NZ / DJNZ) | 4.08 M | 3.92 M | 3.42 M |
-| ALU (ADD, XOR, RLCA, AND, OR, SUB, ADC, CP n) | 3.69 M | 3.19 M | 3.14 M |
-| memory (LD A,(HL) / INC HL / LD (DE),A / INC (HL)) | 5.01 M | 4.40 M | 4.02 M |
-| LDIR (per repeat) | 1.18 M | 1.12 M | 1.05 M |
-| indexed ((IX+d), (IY+d), BIT n,(IY+d)) | 3.54 M | 3.24 M | 2.83 M |
-| CALL / PUSH / POP / RET | 2.63 M | 2.36 M | 2.34 M |
-| ZEXDOC as a whole | 3.67 M | | |
-
-Timed builds: emulated T-states per second (10,000,000 per sample).
-
-| Mix | timed, per-handler tail | timed + memory hooks + shared tail (the Ms. Pac-Man build) |
-|---|---:|---:|
-| register/branch | 29.9 MHz | 27.1 MHz |
-| ALU | 17.5 MHz | 15.3 MHz |
-| memory | 34.8 MHz | 28.0 MHz |
-| LDIR | 23.7 MHz | 20.8 MHz |
-| indexed | 33.9 MHz | 28.1 MHz |
-| call/stack | 28.7 MHz | 21.0 MHz |
-
-Ms. Pac-Man's Z80 runs at 3.072 MHz. SRAM code of `Z80Run` (compiler report,
-Pico W): untimed 80.9 KB per-handler / 61.2 KB shared; timed 86.6 KB
-per-handler; timed + memory hooks + shared tail 86.6 KB (the hook calls cost
-what the shared tail saves). The actual dispatch bytes in the flashed images are disassembled
-in `docs/picow-dispatch-disassembly.txt` and `docs/pico2w-dispatch-disassembly.txt`
-(`tools/disasm_dispatch.py`, Capstone). Tried and reverted: the budget in r6
-with memory and table bases in r9/r11 (slower; `docs/benchmark-notes.md`).
-
-## Pico 2 W (RP2350, COM6, 150 MHz)
-
-The same tests on the physical Pico 2 W (`src/z80.pico2`, `tests/*.pico2w`;
-79 KB of SRAM code untimed, 376 KB SRAM free), run after the board was freed
-for this work: `docs/pico2w-board-sst-api-bench.log`,
-`docs/pico2w-zexdoc-board.log`, `docs/pico2w-zexall-board.log`.
-
-| Check | Result |
-|---|---|
-| SingleStepTests, 8,020 vectors, timed and untimed | 0 failures |
-| API / interrupt checks, timed and untimed | 19 / 18, 0 failures |
-| ZEXDOC | 67 of 67 OK, 0 errors |
-| ZEXALL | 67 of 67 OK, 0 errors |
-
-| Mix (untimed, per-handler tail) | instructions/s | timed, emulated MHz |
-|---|---:|---:|
-| register/branch | 3.89 M | 30.4 |
-| ALU | 3.45 M | 17.0 |
-| memory | 4.79 M | 34.8 |
-| LDIR (per repeat) | 1.26 M | 25.6 |
-| indexed | 3.29 M | 32.2 |
-| call/stack | 3.04 M | 34.0 |
-| ZEXDOC as a whole | 3.74 M | |
-
-At 150 MHz the Cortex-M33 runs this core about as fast as the Pico W's M0+
-at 200 MHz. (These are the Thumb-1 figures, before the Thumb-2 work below.)
-
-### Thumb-2 on the Pico 2 (2026-10-25)
-
-With the compiler's whole-Cortex-M33 inline assembler (signed compiler
-`883c4ae12`), the RP2350 build (`src/z80.pico2`) uses Thumb-2 in two places;
-the RP2040 build is generated byte for byte as before and stays Thumb-1:
-
-1. **Every dispatch tail**: the table load is the branch,
-   `ldr pc, [r1, r2, lsl #2]`, and the budget step is one `subs.w r11, r11, #c`
-   (the M0+ needs `mov`/`subs`/`mov` and `lsls`/`ldr`/`bx`).
-2. **193 hot base-page handlers written in Thumb-2** (`tools/t2_handlers.py`):
-   the 8-bit ALU on registers, immediates and (HL); INC/DEC r, (HL) and rr;
-   LD r,r', r,n, r,(HL), (HL),r, (HL),n, A,(BC/DE), (BC/DE),A, rr,nn; JR, JR cc,
-   DJNZ, JP, CALL, RET, PUSH, POP, EX DE,HL. Flags come from the same tables
-   (`ubfx` picks the H/V/C index). The Q marker lives in r9 so they can write it.
-   With `#Z80_MEM_HOOKS = 1` each memory handler checks the page tables and,
-   on a hooked page, branches to its PureMetal body (kept under `<handler>_pm`),
-   so hooks behave exactly as before. Each handler is emitted per build variant
-   (`#Z80_TIMED`, `#Z80_TRACK_R`, `#Z80_Q`, `#Z80_MEM_HOOKS`); the plain
-   `#Z80_ASM_TAIL = 0` build runs the PureMetal bodies.
-
-Measured on the Pico 2 W (COM6, 150 MHz), the same programs, before and after:
-
-| Mix | untimed before | Thumb-2 tail | + Thumb-2 handlers | timed before | timed after |
-|---|---:|---:|---:|---:|---:|
-| register/branch | 3.89 M | 4.16 M | **5.44 M** (+40%) | 30.3 MHz | **43.5 MHz** |
-| ALU | 3.45 M | 3.63 M | **5.23 M** (+52%) | 17.0 MHz | **25.3 MHz** |
-| memory | 4.79 M | 5.10 M | **6.60 M** (+38%) | 34.8 MHz | **47.4 MHz** |
-| LDIR (per repeat) | 1.26 M | 1.25 M | **1.28 M** (+2%) | 25.6 MHz | **26.3 MHz** |
-| indexed | 3.29 M | 3.44 M | **3.93 M** (+19%) | 32.2 MHz | **38.8 MHz** |
-| call/stack | 3.04 M | 3.18 M | **4.65 M** (+53%) | 34.0 MHz | **49.4 MHz** |
-
-The Ms. Pac-Man build (timed, memory hooks, shared tail), emulated MHz in the
-same order: before 28.9 / 16.2 / 29.1 / 22.5 / 27.3 / 22.2, after
-**42.8 / 24.6 / 41.0 / 22.7 / 32.8 / 36.8** (+48% / +52% / +41% / +1% / +20% / +66%).
-
-Proof of the Thumb-2 build on the Pico 2 W: SingleStepTests, all 8,020 vectors,
-in four builds - timed, untimed, timed with hooks compiled in, and timed with
-every page hooked (`#SST_HOOK_ALL = 1`, which sends every memory handler down
-its PureMetal fall-back): 0 failures in each. API / interrupt checks timed and
-untimed: 19 / 18, 0 failures. ZEXDOC and ZEXALL: 67 of 67 OK, 0 errors each (the same tests, before and after: adc16 75.0 s -> 58.5 s, alu8r 660 s -> 514 s).
-Logs: `docs/pico2w-thumb2-board.log`, `docs/pico2w-t2-zexdoc-board.log`,
-`docs/pico2w-t2-zexall-board.log`. The RP2040 with this compiler: the same
-benchmark figures to the digit and all 8,020 SST vectors (`docs/picow-883c4ae12-board.log`).
-
-## Building
-
-```text
-tools/build.ps1 -Source tests/zex.picow -Output build/zex.uf2      # build only
-tools/board.ps1 -Jobs "tests/sst.picow|build/sst.uf2|12"               # build, upload, capture (lease.ps1)
-tools/zex_chunks.sh 1 0 docs/zexall-board.log COM6                  # a long run, in 15-minute leases
+# build, upload through the compiler's own uploader, and capture the serial output
+.\tools\board.ps1 -Jobs 'tests/bench.picow|build/bench.uf2|15' -Port COM7
 ```
 
-`build.ps1` refuses any image that reaches flash `0x10050000` (the NES ROM
-store) before uploading.
+`build.ps1` refuses an image that reaches flash offset 0x50000. That keeps the
+upper flash free for data a machine stores there (game images, disks); it is
+harmless for these programs, which end well below it.
 
-Original code: MIT. Test inputs keep their own licences (`tests/upstream`).
+### The tests
+
+| Program | What it checks |
+|---|---|
+| `tests/sst.pico*w` (four batches, `#SST_BATCH`) | 8,020 SingleStepTests vectors: every register, R, WZ, Q, IFFs, IM, memory, port traffic and T-states of one instruction each |
+| `tests/api.pico*w` | budgets, R across runs, IM 0/1/2, the EI delay (also across a run boundary), NMI/RETN, HALT, ports, memory hooks |
+| `tests/zex.pico*w` (`#ZEX_ALL`, `#ZEX_FIRST`, `#ZEX_LAST`) | ZEXDOC or ZEXALL under a minimal CP/M BDOS (functions 2 and 9; warm boot = HALT at 0) |
+| `tests/bench.pico*w` | the instruction-mix benchmarks above |
+
+**ZEXDOC and ZEXALL are not included** (Frank D. Cringle's exercisers, GPL).
+Fetch and embed them once with:
+
+```text
+py -3 tools/fetch_zex.py
+```
+
+It downloads `zexdoc.com` and `zexall.com` from a public copy, refuses any file
+whose SHA-256 differs from `tests/upstream/sha256.txt`, and writes
+`tests/zex_data.pico*`. If you already have the files, use
+`py -3 tools/fetch_zex.py --from <folder>` instead. A full exerciser run takes
+20–30 minutes on a Pico. `tools/zex_chunks.sh` splits it over several board
+sessions, each one booting at the first test the last one did not finish.
+
+## Verification
+
+Every result is the board's own serial output; no host emulator stands in for
+the firmware. Logs are in `docs/`.
+
+| Check | Pico W | Pico 2 W (Thumb-2) |
+|---|---|---|
+| SingleStepTests, 8,020 vectors | 0 failures: timed and untimed, per-handler and shared tails | 0 failures: timed, untimed, hooks built in, every page hooked |
+| A fault planted in the checker | caught | |
+| API / interrupt checks | 19 / 18 pass, timed and untimed, both tails | 19 / 18 pass, timed and untimed |
+| ZEXDOC | 67 of 67 OK | 67 of 67 OK |
+| ZEXALL | 67 of 67 OK | 67 of 67 OK |
+
+The flashed dispatch bytes are disassembled from the UF2 images, not from
+assembler listings, in `docs/*-dispatch-disassembly.txt`
+(`tools/disasm_dispatch.py`, Capstone).
+
+## The desktop version
+
+`desktop/` has the same core, generated from the same handlers by
+`tools/gen_z80_desktop.py`, as a Windows program in PureBasic (C back end,
+x64), drawn with the Neon Arcade Display Engine:
+
+- **The window:** a CP/M-style machine (`.COM` at 100h). It shows registers
+  and flags, a disassembly with click-to-break, memory, and the CP/M console.
+  It has Run, Stop, Step and Step 100, the test suites, and ZEXDOC/ZEXALL
+  built in, at full speed or a real-time 4 MHz.
+- **Console runners:** `--test`, `--quick`, `--bench`, `--distest`, and
+  `--run <file.com>`.
+
+```powershell
+py -3 tools/fetch_zex.py                 # once: the exercisers the desktop build embeds
+.\desktop\build.ps1                      # needs PureBasic 6 (pbcompilerc) and the Neon engine beside this repo
+.\desktop\z80_desktop.exe                # the window
+.\desktop\z80_console.exe --test         # SST, API, ZEXDOC, ZEXALL in a console
+```
+
+The engine is found at `..\Neon-Arcade-Dispay-Engine` (a clone of
+github.com/ajtaji/Neon-Arcade-Dispay-Engine), or wherever `NEON_ENGINE_DIR`
+points. The full guide is in `desktop/README.md`.
+
+## Known limits
+
+- IM 0 runs RST bus bytes only. Any other byte stops the CPU with
+  `Z80Error = 2`.
+- Opcode fetches cannot be hooked, so a machine whose hardware reacts to an
+  opcode fetch (a decode latch, a fetch-triggered bank switch) emulates that
+  around `Z80Run`.
+- Interrupts raised from inside a hook are seen at the next sampling point:
+  after the next EI, at HALT, or at the next `Z80Run`.
+- Untested boards are listed above. No machine (video, sound) is part of this
+  repository; this is the CPU.
+
+## Licence and credits
+
+- Original code: MIT, `Copyright (c) 2026 ajtaji` (`LICENSE`).
+- **SingleStepTests/z80** test vectors (`tests/upstream/sst`,
+  `tests/sst_batch*`, `desktop/gen/sst_vectors.pbi`): MIT, Copyright (c) 2024
+  SingleStepTests (`licenses/SingleStepTests-MIT.txt`).
+- **ZEXDOC / ZEXALL**: Copyright (C) 1994 Frank D. Cringle, GPL v2 or later.
+  Not distributed here; `tools/fetch_zex.py` downloads them for your own use.
+- **The desktop build** uses the Neon Arcade Display Engine (fetched
+  separately, its own licence) and PureBasic.

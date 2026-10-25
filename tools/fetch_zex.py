@@ -20,7 +20,9 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UP = os.path.join(ROOT, 'tests', 'upstream')
 SOURCE = 'https://raw.githubusercontent.com/anotherlin/z80emu/master/testfiles/'
-FILES = ['zexdoc.com', 'zexall.com', 'zexdoc.z80', 'zexall.z80']
+# The programs only; their sources (zexdoc.z80, zexall.z80) sit beside them at
+# the same address and are not needed to build or run anything here.
+FILES = ['zexdoc.com', 'zexall.com']
 
 
 def expected():
@@ -42,7 +44,8 @@ def main():
                 if name.endswith('.z80'):
                     continue          # the sources are optional
                 raise SystemExit('%s not found in %s' % (name, src_dir))
-            shutil.copyfile(p, dst)
+            if os.path.abspath(p) != os.path.abspath(dst):
+                shutil.copyfile(p, dst)
         elif not os.path.exists(dst):
             print('downloading', SOURCE + name)
             with urllib.request.urlopen(SOURCE + name) as r:

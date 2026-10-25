@@ -40,7 +40,7 @@ Window options: `--show-tests`, `--zexdoc`, `--zexall`, `--run`,
 Build (PowerShell, not Git Bash, which mangles `/CONSOLE`):
 
 ```powershell
-.\desktop\build.ps1      # all programs; the engine at C:/Users/ajtaj/Desktop/Neon-Arcade-Dispay-Engine/
+.\desktop\build.ps1      # all programs; the engine beside this repo, or at $env:NEON_ENGINE_DIR
 ```
 
 ## Results (i9-11900K, Windows, `/OPTIMIZER`)
