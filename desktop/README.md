@@ -37,11 +37,18 @@ Define `#Z80_TIMED`, `#Z80_SHARED_TAIL`, `#Z80_MEM_HOOKS`, `#Z80_Q` and
 Window options: `--show-tests`, `--zexdoc`, `--zexall`, `--run`,
 `--screenshot <png>` with `--shot-after <frames>` (0 = when the program stops).
 
-Build (PowerShell, not Git Bash, which mangles `/CONSOLE`):
+Build: clone this repository and
+[the Neon Arcade Display Engine](https://github.com/ajtaji/Neon-Arcade-Dispay-Engine)
+side by side, then from the folder that holds both (PureBasic 6.41+, x64, C back end):
 
-```powershell
-.\desktop\build.ps1      # all programs; the engine beside this repo, or at $env:NEON_ENGINE_DIR
+```text
+"C:\Program Files\PureBasic\Compilers\pbcompilerc.exe" Z80EmulatorPicoSeries\desktop\z80_desktop.pb /EXE Z80EmulatorPicoSeries\desktop\z80_desktop.exe /THREAD /DPIAWARE /OPTIMIZER
 ```
+
+or, for the window and all console programs, `.\desktop\build.ps1` from
+PowerShell (not Git Bash, which mangles `/CONSOLE`). ZEXDOC/ZEXALL are optional:
+without `py -3 tools/fetch_zex.py` everything builds and says they are not
+fetched; after it, `build.ps1` builds them in (or add `/CONSTANT Z80_HAVE_ZEX=1`).
 
 ## Results (i9-11900K, Windows, `/OPTIMIZER`)
 

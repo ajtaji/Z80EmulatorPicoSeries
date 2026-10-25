@@ -249,16 +249,44 @@ x64), drawn with the Neon Arcade Display Engine:
 - **Console runners:** `--test`, `--quick`, `--bench`, `--distest`, and
   `--run <file.com>`.
 
-```powershell
-py -3 tools/fetch_zex.py                 # once: the exercisers the desktop build embeds
-.\desktop\build.ps1                      # needs PureBasic 6 (pbcompilerc) and the Neon engine beside this repo
-.\desktop\z80_desktop.exe                # the window
-.\desktop\z80_console.exe --test         # SST, API, ZEXDOC, ZEXALL in a console
+### Building the desktop version
+
+You need **PureBasic 6.41 or later, Windows x64, with the C back end**
+(`pbcompilerc.exe`) and the **Neon Arcade Display Engine**
+([github.com/ajtaji/Neon-Arcade-Dispay-Engine](https://github.com/ajtaji/Neon-Arcade-Dispay-Engine)),
+cloned beside this repository:
+
+```text
+git clone https://github.com/ajtaji/Z80EmulatorPicoSeries.git
+git clone https://github.com/ajtaji/Neon-Arcade-Dispay-Engine.git
 ```
 
-The engine is found at `..\Neon-Arcade-Dispay-Engine` (a clone of
-github.com/ajtaji/Neon-Arcade-Dispay-Engine), or wherever `NEON_ENGINE_DIR`
-points. The full guide is in `desktop/README.md`.
+Then, from the folder that holds both, in a Command Prompt (in PowerShell, put `&` in front of the quoted compiler path):
+
+```text
+"C:\Program Files\PureBasic\Compilers\pbcompilerc.exe" Z80EmulatorPicoSeries\desktop\z80_desktop.pb /EXE Z80EmulatorPicoSeries\desktop\z80_desktop.exe /THREAD /DPIAWARE /OPTIMIZER
+Z80EmulatorPicoSeries\desktop\z80_desktop.exe
+```
+
+The engine is found at `../Neon-Arcade-Dispay-Engine/` beside the repository.
+To use another copy, add `/CONSTANT GL_ENGINE_DIR$=<path to the engine>/`
+(with the trailing slash).
+
+**ZEXDOC and ZEXALL are optional.** A fresh clone builds and runs without them:
+the SingleStepTests, API checks, benchmarks and the debugger all work, and the
+ZEXDOC/ZEXALL buttons and the Tests output say they are not fetched. To build
+them in, fetch them once and add `/CONSTANT Z80_HAVE_ZEX=1`:
+
+```text
+py -3 Z80EmulatorPicoSeries\tools\fetch_zex.py
+"C:\Program Files\PureBasic\Compilers\pbcompilerc.exe" Z80EmulatorPicoSeries\desktop\z80_desktop.pb /EXE Z80EmulatorPicoSeries\desktop\z80_desktop.exe /THREAD /DPIAWARE /OPTIMIZER /CONSTANT Z80_HAVE_ZEX=1
+```
+
+`desktop\build.ps1` (PowerShell) builds the window and the console runners
+(`z80_console.exe --test | --quick | --bench | --distest | --run <file.com>`) in
+one go. It finds the engine beside the repository (or at `NEON_ENGINE_DIR`) and
+builds ZEXDOC/ZEXALL in by itself once they are fetched. The full guide is in
+`desktop/README.md`.
 
 ## Known limits
 

@@ -17,6 +17,7 @@ $Engine = (Resolve-Path $Engine).Path.Replace('\', '/').TrimEnd('/') + '/'
 if (!(Test-Path $Compiler)) { throw "PureBasic's pbcompilerc.exe is not at ${Compiler}: pass -Compiler." }
 & (Join-Path $here 'build_console.ps1') -Compiler $Compiler
 $exe = Join-Path $here 'z80_desktop.exe'
-& $Compiler (Join-Path $here 'z80_desktop.pb') /EXE $exe /THREAD /DPIAWARE /OPTIMIZER /CONSTANT "GL_ENGINE_DIR$=$Engine"
+$zex = if (Test-Path (Join-Path $here '..\tests\zex_data.pico')) { '1' } else { '0' }
+& $Compiler (Join-Path $here 'z80_desktop.pb') /EXE $exe /THREAD /DPIAWARE /OPTIMIZER /CONSTANT "GL_ENGINE_DIR$=$Engine" /CONSTANT "Z80_HAVE_ZEX=$zex"
 if ($LASTEXITCODE -ne 0 -or !(Test-Path $exe)) { throw 'Build failed: z80_desktop.exe' }
 Get-FileHash -Algorithm SHA256 (Join-Path $here '*.exe') | ForEach-Object { $_.Hash + '  ' + (Split-Path $_.Path -Leaf) }

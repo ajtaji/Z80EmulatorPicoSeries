@@ -2,7 +2,16 @@
 ; in one pass), the interrupt/API checks, and ZEXDOC/ZEXALL under the CP/M
 ; stub. Each returns its failure count and prints the board's own verdicts.
 XIncludeFile "gen/sst_vectors.pbi"
-XIncludeFile "../tests/zex_data.pico"
+; ZEXDOC/ZEXALL (GPL, not in the repository) are built in only when fetched:
+; py -3 tools/fetch_zex.py writes tests/zex_data.pico, and desktop/build.ps1
+; then passes /CONSTANT Z80_HAVE_ZEX=1. Without them everything else builds.
+CompilerIf Not Defined(Z80_HAVE_ZEX, #PB_Constant)
+  #Z80_HAVE_ZEX = 0
+CompilerEndIf
+CompilerIf #Z80_HAVE_ZEX = 1
+  XIncludeFile "../tests/zex_data.pico"
+CompilerEndIf
+#ZEX_MISSING$ = "ZEXDOC/ZEXALL not fetched - run  py -3 tools/fetch_zex.py  and rebuild"
 
 Procedure.i RunSst()
   HookMode = #HOOK_SST
@@ -47,18 +56,27 @@ Procedure.i ZexSelect(first.i, last.i)
   ProcedureReturn 1
 EndProcedure
 
-Procedure ZexLoad(all.i)
-  If all
-    LoadComFromData(?ZexAll, ?ZexAllEnd - ?ZexAll, "zexall.com")
-  Else
-    LoadComFromData(?ZexDoc, ?ZexDocEnd - ?ZexDoc, "zexdoc.com")
-  EndIf
-  ZexOk = 0 : ZexErr = 0
+; Loads an exerciser; 0 when this build has none.
+Procedure.i ZexLoad(all.i)
+  CompilerIf #Z80_HAVE_ZEX = 1
+    If all
+      LoadComFromData(?ZexAll, ?ZexAllEnd - ?ZexAll, "zexall.com")
+    Else
+      LoadComFromData(?ZexDoc, ?ZexDocEnd - ?ZexDoc, "zexdoc.com")
+    EndIf
+    ZexOk = 0 : ZexErr = 0
+    ProcedureReturn 1
+  CompilerElse
+    ProcedureReturn 0
+  CompilerEndIf
 EndProcedure
 
 Procedure.i RunZex(all.i, first.i = 0, last.i = 67)
   Protected used.q, t0.q, ins.q
-  ZexLoad(all)
+  If ZexLoad(all) = 0
+    Say(#ZEX_MISSING$) : Eol()
+    ProcedureReturn -1
+  EndIf
   If all : Say("ZEXALL") : Else : Say("ZEXDOC") : EndIf
   If ZexSelect(first, last) = 0
     Say(" layout not recognised FAIL") : Eol() : ProcedureReturn 1
@@ -107,8 +125,12 @@ Procedure.i RunAllTests(withZex.i = 1)
   bad + Bool(RunSst() <> 0)
   bad + Bool(RunApi() <> 0)
   If withZex
-    bad + Bool(RunZex(0) <> 0)
-    bad + Bool(RunZex(1) <> 0)
+    CompilerIf #Z80_HAVE_ZEX = 1
+      bad + Bool(RunZex(0) <> 0)
+      bad + Bool(RunZex(1) <> 0)
+    CompilerElse
+      Say(#ZEX_MISSING$) : Eol()
+    CompilerEndIf
   EndIf
   Say("Suites failed: ") : Num(bad) : Eol()
   ProcedureReturn bad

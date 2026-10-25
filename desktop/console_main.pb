@@ -43,6 +43,9 @@ Select arg$
     Else
       rc = RunZex(Val(ProgramParameter(1)))
     EndIf
+    If rc = -1
+      rc = 3
+    EndIf
   Case "--run"
     If LoadProgram(ProgramParameter(1))
       Repeat

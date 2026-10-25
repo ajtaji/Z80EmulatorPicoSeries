@@ -132,7 +132,12 @@ EndProcedure
 
 Procedure StartExerciser(all.i)
   Running = 0
-  ZexLoad(all)
+  If ZexLoad(all) = 0
+    Status$ = #ZEX_MISSING$ + "."
+    TestLog$ = #ZEX_MISSING$ + #LF$
+    LogTab = 1
+    ProcedureReturn
+  EndIf
   IoLog$ = "" : IoLine$ = ""
   ZexLast = Micros()
   LogTab = 0 : LogTop = 0 : DisTop = Z80PC
@@ -148,6 +153,9 @@ Procedure RunTestsInWindow()
   CopyMemory(@Z80Mem(0), *keep, 65536)
   IoLog$ = "" : IoLine$ = ""
   TestsFailed = RunAllTests(0)
+  CompilerIf #Z80_HAVE_ZEX = 0
+    Say("(ZEXDOC and ZEXALL: " + #ZEX_MISSING$ + ")") : Eol()
+  CompilerEndIf
   TestLog$ = IoLog$
   TestsRun = 1
   ; give the user's program back
