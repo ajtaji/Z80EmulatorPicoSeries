@@ -79,3 +79,4 @@ Z80 instruction exerciser
 instructions=637 million + 0 us=132576852 instructions/s=4804791
 halt PC=0001 stopped=0
 ZEX ok=58 errors=0 PASS
+=== exerciser 0 finished 12:41:29
