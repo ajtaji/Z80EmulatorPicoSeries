@@ -37,6 +37,27 @@ Define `#Z80_TIMED`, `#Z80_SHARED_TAIL`, `#Z80_MEM_HOOKS`, `#Z80_Q` and
 Window options: `--show-tests`, `--zexdoc`, `--zexall`, `--run`,
 `--screenshot <png>` with `--shot-after <frames>` (0 = when the program stops).
 
+### Pointer and display scale
+
+The window follows the engine's hosting rules (GlUIChrome.pbi, section 5a): the
+canvas is the physical client size, `Neon_UIScale` is physical / logical, the
+fonts are built at that scale, `WindowMouseX/Y` go to the engine unscaled, and
+`UI_UseCRT` is off (there is no CRT pass, so the barrel warp must not bend the
+pointer). Two checks prove it at whatever scale the desktop is set to:
+
+- `z80_desktop.exe --pointer-test <report.txt>` drives the window with a
+  synthetic pointer and no real cursor. For each control (every toolbar
+  button, the Break-at field, every tab, both scroll bars, the disassembly
+  rows) it hovers all four inner corners and a point just outside, then
+  clicks at the bottom-right corner and checks the control did its job, then
+  closes. At 125%: 155 checks, 0 failures.
+- `tools\ui_check.ps1 [-Shot <png>]` moves the real pointer, without
+  clicking, over controls at the top, middle, bottom and right of the window
+  and checks the window reads the same point under the same control. It holds
+  the desktop lease and skips any point where another window is on top.
+
+![The pointer on Run tests at 125%](../docs/desktop-pointer-125.png)
+
 Build: clone this repository and
 [the Neon Arcade Display Engine](https://github.com/ajtaji/Neon-Arcade-Dispay-Engine)
 side by side, then from the folder that holds both (PureBasic 6.41+, x64, C back end):

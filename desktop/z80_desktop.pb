@@ -11,6 +11,8 @@
 ;   --run               start the loaded program
 ;   --screenshot <png>  save the window's own picture and close
 ;   --shot-after <n>    ... after n frames (default 120)
+;   --ui-log <file>     write each control's rectangle and the state every frame
+;                       (for driving the window with a real pointer in a test)
 ; The console build (console_main.pb, z80_console.exe) runs every suite
 ; including ZEXDOC/ZEXALL, and the benchmarks.
 ;
@@ -52,6 +54,48 @@ Global TestsRun.i, TestsFailed.i, TestLog$, ShotPath$, ShotFrames.i, ShotAfter.i
 Global RealTime.i, RealClock.q, RealDone.q
 
 #REAL_KHZ = 4000     ; a 4 MHz Z80 in real-time mode
+
+; --ui-log <file>: every frame, each clickable control's rectangle (canvas
+; units), the control under the pointer and the program's state, for driving
+; the window with a real pointer from a test script.
+Global UiLogPath$, UiRects$, UiHover$
+Declare BuildFonts(s.f)
+
+; --pointer-test <file>: the window drives itself with a synthetic pointer
+; (no real cursor, no clicks outside it). For every control it puts the
+; pointer just inside each corner and just outside the bottom-right one,
+; feeds it to Neon_ChromeBeginFrame as a physical client position, checks
+; the control under it, then clicks at the bottom-right corner and checks the
+; control did its job. The report goes to <file>; the window then closes.
+Structure UiBox
+  x.f : y.f : w.f : h.f
+EndStructure
+Global NewMap UiBoxes.UiBox()
+Global PtTest.i, PtOut$, PtStep.i, PtFrame.i, PtX.f, PtY.f, PtDown.i, PtDone.i
+Global PtWarm.i, PtChecks.i, PtFails.i, PtReport$, PtOpened.i, PtPc.i, PtMemTop.i, PtKey$, PtClick.i
+Global NewList PtSteps.s()
+
+Procedure UiRect(name.s, x.f, y.f, w.f, h.f)
+  If UiLogPath$ = "" And PtTest = 0 : ProcedureReturn : EndIf
+  UiRects$ + "RECT " + name + " " + StrF(x, 1) + " " + StrF(y, 1) + " " + StrF(w, 1) + " " + StrF(h, 1) + #LF$
+  If Neon_Hit(x, y, w, h) : UiHover$ + name + " " : EndIf
+  If PtTest
+    AddMapElement(UiBoxes(), name)
+    UiBoxes()\x = x : UiBoxes()\y = y : UiBoxes()\w = w : UiBoxes()\h = h
+  EndIf
+EndProcedure
+
+Procedure UiTabs(id.i, prefix.s)
+  Protected i.i
+  If UiLogPath$ = "" And PtTest = 0 : ProcedureReturn : EndIf
+  If FindMapElement(Neon_TabLayout(), Str(id))
+    For i = 0 To Neon_TabLayout()\Count - 1
+      If Neon_TabLayout()\W(i) > 0
+        UiRect(prefix + Str(i), Neon_TabLayout()\X(i), Neon_TabLayout()\Y, Neon_TabLayout()\W(i), Neon_TabLayout()\H)
+      EndIf
+    Next
+  EndIf
+EndProcedure
 
 ; ---------------------------------------------------------------------------
 ; Running
@@ -239,6 +283,7 @@ Procedure DrawDisasm(x.f, y.f, w.f, h.f)
     If adr = BreakAt
       Neon_Box(x + Neon_S(6), yy + Neon_S(3), Neon_S(8), Neon_S(8), Neon_C_RedR, Neon_C_RedG, Neon_C_RedB)
     EndIf
+    If i < 6 : UiRect("dis" + Str(i) + ":" + H4(adr), x, yy - Neon_S(2), w, lh) : EndIf
     If Neon_MouseClicked And Neon_Hit(x, yy - Neon_S(2), w, lh)
       If BreakAt = adr : BreakAt = -1 : BreakText\s = "" : Else : BreakAt = adr : BreakText\s = H4(adr) : EndIf
     EndIf
@@ -256,9 +301,11 @@ Procedure DrawMemory(x.f, y.f, w.f, h.f)
   Protected lh.f = Neon_S(18), rows.i, r.i, c.i, a.i, s.s, yy.f, base.i, ch.s, b.i, anchor.i
   Neon_Panel(x, y, w, h, "Memory", Neon_C_GrnR, Neon_C_GrnG, Neon_C_GrnB)
   MemTab = Neon_TabStrip(101, x + Neon_S(2), y + Neon_S(28), w - Neon_S(4), Neon_S(26), "All 64 KB|At PC|At HL|At SP", MemTab)
+  UiTabs(101, "memtab")
   rows = Int((h - Neon_S(70)) / lh)
   If MemTab = 0
     If Neon_Hit(x, y, w, h) And Wheel : MemTop - Wheel * 3 : EndIf
+    UiRect("memscroll", x + w - Neon_S(14), y + Neon_S(58), Neon_S(12), h - Neon_S(62))
     Neon_ScrollBarV(102, x + w - Neon_S(14), y + Neon_S(58), Neon_S(12), h - Neon_S(62), 4096, rows, @MemTop)
     If MemTop > 4096 - rows : MemTop = 4096 - rows : EndIf
     If MemTop < 0 : MemTop = 0 : EndIf
@@ -290,6 +337,7 @@ Procedure DrawLog(x.f, y.f, w.f, h.f)
   Protected lh.f = Neon_S(17), rows.i, n.i, i.i, t.s, yy.f, line.s
   Neon_Panel(x, y, w, h, "Output", Neon_C_AmbR, Neon_C_AmbG, Neon_C_AmbB)
   LogTab = Neon_TabStrip(201, x + Neon_S(2), y + Neon_S(28), w - Neon_S(4), Neon_S(26), "CP/M console (BDOS 2, 9)|Test results", LogTab)
+  UiTabs(201, "logtab")
   If LogTab = 0 : t = IoLog$ + IoLine$ : Else : t = TestLog$ : EndIf
   If t = "" : t = "(nothing yet)" : EndIf
   n = CountString(t, #LF$) + 1
@@ -297,6 +345,7 @@ Procedure DrawLog(x.f, y.f, w.f, h.f)
   ; follow the end while output grows, unless scrolled away
   If Neon_Hit(x, y, w, h) And Wheel : LogTop - Wheel * 3 : EndIf
   If Running And LogTab = 0 : LogTop = n - rows : EndIf
+  UiRect("logscroll", x + w - Neon_S(14), y + Neon_S(58), Neon_S(12), h - Neon_S(62))
   Neon_ScrollBarV(202, x + w - Neon_S(14), y + Neon_S(58), Neon_S(12), h - Neon_S(62), n, rows, @LogTop)
   If LogTop > n - rows : LogTop = n - rows : EndIf
   If LogTop < 0 : LogTop = 0 : EndIf
@@ -318,8 +367,13 @@ EndProcedure
 Procedure DrawToolbar(w.f)
   Protected x.f = Neon_S(10), y.f = Neon_S(8), bh.f = Neon_S(30), f.s, label.s, k.i, r.d
   Neon_Box(0, 0, w, Neon_S(46), Neon_C_HeadR, Neon_C_HeadG, Neon_C_HeadB)
+  UiRect("open", x, y, Neon_S(80), bh)
   If Neon_Button(x, y, Neon_S(80), bh, "Open...")
-    f = OpenFileRequester("Load a Z80 program", "", "CP/M program (*.com)|*.com|Raw image at 0 (*.bin;*.rom)|*.bin;*.rom|All files (*.*)|*.*", 0)
+    If PtTest
+      PtOpened = 1 : f = ""   ; the pointer test stops short of the modal dialog
+    Else
+      f = OpenFileRequester("Load a Z80 program", "", "CP/M program (*.com)|*.com|Raw image at 0 (*.bin;*.rom)|*.bin;*.rom|All files (*.*)|*.*", 0)
+    EndIf
     If f <> ""
       Running = 0
       IoLog$ = "" : IoLine$ = ""
@@ -331,12 +385,14 @@ Procedure DrawToolbar(w.f)
     EndIf
   EndIf
   x + Neon_S(88)
+  UiRect("reset", x, y, Neon_S(64), bh)
   If Neon_Button(x, y, Neon_S(64), bh, "Reset")
     Running = 0 : Z80Reset() : Status$ = "Reset: PC 0000h, interrupts off. Memory kept."
   EndIf
   x + Neon_S(72)
   label = "Run"
   If Running : label = "Stop" : EndIf
+  UiRect("run", x, y, Neon_S(64), bh)
   If Neon_Button(x, y, Neon_S(64), bh, label, Running)
     Running = Bool(Running = 0)
     If Running
@@ -348,10 +404,12 @@ Procedure DrawToolbar(w.f)
     EndIf
   EndIf
   x + Neon_S(72)
+  UiRect("step", x, y, Neon_S(60), bh)
   If Neon_Button(x, y, Neon_S(60), bh, "Step", #False, Bool(Running = 0))
     StepOne() : Status$ = "Stepped to " + H4(Z80PC) + "h."
   EndIf
   x + Neon_S(68)
+  UiRect("step100", x, y, Neon_S(84), bh)
   If Neon_Button(x, y, Neon_S(84), bh, "Step 100", #False, Bool(Running = 0))
     For k = 1 To 100
       StepOne()
@@ -362,24 +420,29 @@ Procedure DrawToolbar(w.f)
   x + Neon_S(92)
   Neon_Text(*Neon_FontUI, x, y + Neon_S(6), "Break at", Neon_C_DimR, Neon_C_DimG, Neon_C_DimB)
   x + Neon_S(62)
+  UiRect("breakat", x, y, Neon_S(70), bh)
   If Neon_TextInput(301, x, y, Neon_S(70), bh, @BreakText, "hex", @BreakCaret)
     If Trim(BreakText\s) = "" : BreakAt = -1 : Else : BreakAt = Val("$" + Trim(BreakText\s)) & $FFFF : EndIf
   EndIf
   x + Neon_S(78)
+  UiRect("runtests", x, y, Neon_S(96), bh)
   If Neon_Button(x, y, Neon_S(96), bh, "Run tests", Bool(TestsRun And TestsFailed = 0))
     RunTestsInWindow()
   EndIf
   x + Neon_S(104)
+  UiRect("zexdoc", x, y, Neon_S(84), bh)
   If Neon_Button(x, y, Neon_S(84), bh, "ZEXDOC")
     StartExerciser(0)
   EndIf
   x + Neon_S(92)
+  UiRect("zexall", x, y, Neon_S(84), bh)
   If Neon_Button(x, y, Neon_S(84), bh, "ZEXALL")
     StartExerciser(1)
   EndIf
   x + Neon_S(92)
   label = "Full speed"
   If RealTime : label = "4 MHz" : EndIf
+  UiRect("speed", x, y, Neon_S(96), bh)
   If Neon_Button(x, y, Neon_S(96), bh, label, RealTime)
     RealTime = Bool(RealTime = 0) : RealClock = 0
   EndIf
@@ -407,8 +470,129 @@ Procedure SaveShot(pw.i, ph.i)
   ShotFrames = -1
 EndProcedure
 
+; --- the synthetic pointer test ---------------------------------------------
+
+Procedure PtSay(t.s)
+  PtReport$ + t + #LF$
+EndProcedure
+
+Procedure PtCheck(what.s, ok.i, detail.s)
+  PtChecks + 1
+  If ok
+    PtSay("  ok    " + what)
+  Else
+    PtFails + 1 : PtSay("  FAIL  " + what + " - " + detail)
+  EndIf
+EndProcedure
+
+Procedure PtSetup()
+  Protected s.s
+  ; control | what the click must do
+  s = "open|opened reset|reset step|pc step100|stepped speed|realtime1 speed|realtime0 breakat|focus " +
+      "runtests|tests memtab1|memtab1 memtab2|memtab2 memtab3|memtab3 memtab0|memtab0 memscroll|memtop " +
+      "dis2|break dis2|unbreak logtab1|logtab1 logtab0|logtab0 logscroll|hover zexdoc|zex run|stopifrunning " +
+      "zexall|zex run|stopifrunning run|running speed|realtime1 speed|realtime0 run|stopped"
+  Protected i.i
+  For i = 1 To CountString(s, " ") + 1
+    AddElement(PtSteps()) : PtSteps() = StringField(s, i, " ")
+  Next
+  FirstElement(PtSteps())
+  PtSay("pointer test: window scale " + StrF(Neon_UIScale, 3) + ", canvas " + Str(Util_BaseWidth) + "x" + Str(Util_BaseHeight) +
+        " physical, window " + Str(Util_WinWidth) + "x" + Str(Util_WinHeight) + " logical")
+EndProcedure
+
+Procedure.s PtExpect(act.s)
+  Select act
+    Case "opened"   : If PtOpened = 0 : ProcedureReturn "Open... did not fire" : EndIf
+    Case "reset"    : If Left(Status$, 6) <> "Reset:" : ProcedureReturn Status$ : EndIf
+    Case "pc"       : If Z80PC = PtPc : ProcedureReturn "PC stayed " + H4(PtPc) : EndIf
+    Case "stepped"  : If Left(Status$, 10) <> "Stepped to" : ProcedureReturn Status$ : EndIf
+    Case "realtime1" : If RealTime <> 1 : ProcedureReturn "still full speed" : EndIf
+    Case "realtime0" : If RealTime <> 0 : ProcedureReturn "still 4 MHz" : EndIf
+    Case "focus"    : If Neon_FocusID <> 301 : ProcedureReturn "focus " + Str(Neon_FocusID) : EndIf
+    Case "tests"    : If TestsRun = 0 Or LogTab <> 1 : ProcedureReturn "tests did not run" : EndIf
+    Case "memtab0", "memtab1", "memtab2", "memtab3"
+      If MemTab <> Val(Right(act, 1)) : ProcedureReturn "memory tab " + Str(MemTab) : EndIf
+    Case "logtab0", "logtab1"
+      If LogTab <> Val(Right(act, 1)) : ProcedureReturn "output tab " + Str(LogTab) : EndIf
+    Case "memtop"   : If MemTop <= PtMemTop : ProcedureReturn "memory top " + Str(PtMemTop) + " -> " + Str(MemTop) : EndIf
+    Case "break"    : If BreakAt <> Val("$" + StringField(PtKey$, 2, ":")) : ProcedureReturn "break at " + Str(BreakAt) : EndIf
+    Case "unbreak"  : If BreakAt <> -1 : ProcedureReturn "break at " + Str(BreakAt) : EndIf
+    Case "zex"
+      If FindString(Status$, "not fetched") = 0 And (Running = 0 Or LoadedName$ = "")
+        ProcedureReturn "running=" + Str(Running) + " " + Status$
+      EndIf
+    Case "stopifrunning", "stopped" : If Running : ProcedureReturn "still running" : EndIf
+    Case "running"  : If Running = 0 : ProcedureReturn "did not run: " + Status$ : EndIf
+  EndSelect
+  ProcedureReturn ""
+EndProcedure
+
+; Called at the top of every frame, before Neon_ChromeBeginFrame: reads what
+; the last frame drew under the pointer, then sets the pointer for this one.
+; Per control: frames 0-9 the four inner corners and one point outside (set,
+; then check), 10 press at the bottom-right corner, 11 release, 15 check.
+Procedure PtDrive()
+  Protected name.s, act.s, k.s, e.s, corner.i, hit.i, x.f, y.f, inset.f = 2
+  If PtStep = 0 And PtFrame = 0 : PtSetup() : EndIf
+  If ListIndex(PtSteps()) < 0 : PtDone = 1 : ProcedureReturn : EndIf
+  name = StringField(PtSteps(), 1, "|") : act = StringField(PtSteps(), 2, "|")
+  If PtFrame = 0
+    PtKey$ = ""
+    ForEach UiBoxes()
+      k = MapKey(UiBoxes())
+      If k = name Or Left(k, Len(name) + 1) = name + ":" : PtKey$ = k : Break : EndIf
+    Next
+    If PtKey$ = ""
+      PtCheck(name + " is drawn", #False, "no such control")
+      PtFrame = 99
+    Else
+      PtSay(PtKey$)
+      PtClick = Bool(act <> "hover" And Not (act = "stopifrunning" And Running = 0))
+    EndIf
+  EndIf
+  If PtFrame < 99 And FindMapElement(UiBoxes(), PtKey$)
+    corner = PtFrame / 2
+    If PtFrame >= 10 : corner = 3 : EndIf
+    Select corner
+      Case 0 : x = UiBoxes()\x + inset : y = UiBoxes()\y + inset
+      Case 1 : x = UiBoxes()\x + UiBoxes()\w - inset : y = UiBoxes()\y + inset
+      Case 2 : x = UiBoxes()\x + inset : y = UiBoxes()\y + UiBoxes()\h - inset
+      Case 3 : x = UiBoxes()\x + UiBoxes()\w - inset : y = UiBoxes()\y + UiBoxes()\h - inset
+      Case 4 : x = UiBoxes()\x + UiBoxes()\w + inset : y = UiBoxes()\y + UiBoxes()\h + inset
+    EndSelect
+    If PtFrame < 10 And PtFrame & 1
+      ; the last frame drew with the pointer at this point
+      hit = Bool(FindString(" " + UiHover$, " " + PtKey$ + " "))
+      e = "pointer " + StrF(PtX, 1) + "," + StrF(PtY, 1) + " read as " + StrF(Neon_MX, 1) + "," + StrF(Neon_MY, 1) + ", under it: " + UiHover$
+      If corner = 4
+        PtCheck("not hovered just outside its bottom-right corner (" + StrF(PtX, 0) + "," + StrF(PtY, 0) + ")", Bool(hit = 0), e)
+      Else
+        PtCheck("hovered at its " + StringField("top-left top-right bottom-left bottom-right", corner + 1, " ") +
+                " corner (" + StrF(PtX, 0) + "," + StrF(PtY, 0) + ")",
+                Bool(hit And Abs(Neon_MX - PtX) < 0.51 And Abs(Neon_MY - PtY) < 0.51), e)
+      EndIf
+    EndIf
+    PtX = x : PtY = y : PtDown = 0
+    If PtFrame = 10 And PtClick : PtDown = 1 : PtPc = Z80PC : PtMemTop = MemTop : PtOpened = 0 : EndIf
+    If PtFrame = 10 And PtClick = 0 : PtFrame = 99 : EndIf
+  EndIf
+  If PtFrame = 15
+    e = PtExpect(act)
+    PtCheck("click does its job (" + act + ")", Bool(e = ""), e)
+    PtFrame = 99
+  EndIf
+  If PtFrame = 99
+    PtFrame = 0 : PtStep + 1
+    If NextElement(PtSteps()) = 0 : PtDone = 1 : EndIf
+  Else
+    PtFrame + 1
+  EndIf
+EndProcedure
+
 Procedure Frame()
   Protected r.RECT, pw.i, ph.i, mx.i, my.i, down.b, w.f, h.f, colW.f, top.f, logH.f, now.q, midH.f
+  Protected lw.i, lh.i, s.f, f.i
   SetGadgetAttribute(Gl, #PB_OpenGL_SetContext, #True)
   GetClientRect_(WindowID(Win), @r)
   pw = r\right - r\left : ph = r\bottom - r\top
@@ -416,13 +600,26 @@ Procedure Frame()
   If GadgetWidth(Gl) <> WindowWidth(Win) Or GadgetHeight(Gl) <> WindowHeight(Win)
     ResizeGadget(Gl, 0, 0, WindowWidth(Win), WindowHeight(Win))
   EndIf
+  ; Engine hosting block 5a: canvas and viewport are the PHYSICAL client size,
+  ; Util_Win* the LOGICAL one, Neon_UIScale = physical / logical, and the mouse
+  ; goes in as WindowMouseX/Y give it (already physical: no scaling).
+  lw = WindowWidth(Win, #PB_Window_InnerCoordinate) : lh = WindowHeight(Win, #PB_Window_InnerCoordinate)
+  If lw < 1 Or lh < 1 : ProcedureReturn : EndIf
+  s = pw / lw
+  If Abs(s - Neon_UIScale) > 0.01 : BuildFonts(s) : EndIf   ; moved to a monitor with another scale
   Util_BaseWidth = pw : Util_BaseHeight = ph
-  ; the logical size that DesktopScaledX/Y() turns back into the physical drawable
-  Util_WinWidth = Round(pw / DesktopResolutionX(), #PB_Round_Nearest)
-  Util_WinHeight = Round(ph / DesktopResolutionY(), #PB_Round_Nearest)
+  Util_WinWidth = lw : Util_WinHeight = lh
   GL_ViewportX = 0 : GL_ViewportY = 0 : GL_ViewportW = pw : GL_ViewportH = ph
-  mx = WindowMouseX(Win) * DesktopResolutionX() : my = WindowMouseY(Win) * DesktopResolutionY()
+  UI_UseCRT = #False     ; no CRT pass here: left on, the barrel warp bends the pointer
+  mx = WindowMouseX(Win) : my = WindowMouseY(Win)
   down = Bool(GetAsyncKeyState_(#VK_LBUTTON) & $8000)
+  If PtTest
+    PtWarm + 1
+    If PtWarm > 5 : PtDrive() : EndIf
+    mx = PtX : my = PtY : down = PtDown : Wheel = 0 : KeyCode = 0 : KeyChar = 0
+    ClearMap(UiBoxes())
+  EndIf
+  UiRects$ = "" : UiHover$ = ""
   Neon_ChromeBeginFrame(mx, my, down, Wheel, KeyCode, KeyChar, 1.0 / 60.0)
   Wheel = 0 : KeyCode = 0 : KeyChar = 0
   glBindFramebuffer(#GL_FRAMEBUFFER, 0)
@@ -451,6 +648,20 @@ Procedure Frame()
   Neon_Box(0, h - Neon_S(26), w, Neon_S(26), Neon_C_HeadR, Neon_C_HeadG, Neon_C_HeadB)
   Neon_Text(*Neon_FontSmall, Neon_S(10), h - Neon_S(21), "Program: " + LoadedName$ + "     " + Status$, Neon_C_DimR, Neon_C_DimG, Neon_C_DimB)
   Neon_ChromeEndFrame()
+  If UiLogPath$ <> ""
+    f = CreateFile(#PB_Any, UiLogPath$)
+    If f
+      WriteString(f, UiRects$)
+      WriteStringN(f, "HOVER " + UiHover$)
+      WriteStringN(f, "STATE running=" + Str(Running) + " logtab=" + Str(LogTab) + " memtab=" + Str(MemTab) +
+                      " breakat=" + Str(BreakAt) + " realtime=" + Str(RealTime) + " pc=" + Str(Z80PC) +
+                      " memtop=" + Str(MemTop) + " testsrun=" + Str(TestsRun) + " focus=" + Str(Neon_FocusID) +
+                      " mx=" + StrF(Neon_MX, 1) + " my=" + StrF(Neon_MY, 1) + " scale=" + StrF(Neon_UIScale, 3) +
+                      " loaded=" + LoadedName$)
+      WriteStringN(f, "STATUS " + Status$)
+      CloseFile(f)
+    EndIf
+  EndIf
   If ShotPath$ <> ""
     ShotFrames + 1
     If ShotFrames >= ShotAfter And (Running = 0 Or ShotAfter > 0)
@@ -458,6 +669,19 @@ Procedure Frame()
     EndIf
   EndIf
   SetGadgetAttribute(Gl, #PB_OpenGL_FlipBuffers, #True)
+EndProcedure
+
+; The four chrome fonts at logical size * s (engine hosting block 5a).
+Procedure BuildFonts(s.f)
+  Neon_UIScale = s
+  *Neon_FontUI = Neon_CreateFontPx("Segoe UI", Round(14 * s, #PB_Round_Nearest))
+  *Neon_FontSmall = Neon_CreateFontPx("Segoe UI", Round(12 * s, #PB_Round_Nearest))
+  *Neon_FontBold = Neon_CreateFontPx("Segoe UI", Round(15 * s, #PB_Round_Nearest), #PB_Font_Bold)
+  *Neon_FontMono = Neon_CreateFontPx("Consolas", Round(14 * s, #PB_Round_Nearest))
+  GLFontSetSnapToPixel(*Neon_FontUI, #True)
+  GLFontSetSnapToPixel(*Neon_FontSmall, #True)
+  GLFontSetSnapToPixel(*Neon_FontBold, #True)
+  GLFontSetSnapToPixel(*Neon_FontMono, #True)
 EndProcedure
 
 Procedure.f DisplayScale()
@@ -473,7 +697,7 @@ Procedure.f DisplayScale()
 EndProcedure
 
 Procedure WindowMain()
-  Protected ev.i, s.f, w.i = 1440, h.i = 900, quit.i, et.i, sc.f
+  Protected ev.i, s.f, w.i = 1440, h.i = 900, quit.i, et.i, sc.f, f.i
   ExamineDesktops()
   ; the start size is LOGICAL; the work area is physical
   sc = DesktopResolutionX()
@@ -483,16 +707,7 @@ Procedure WindowMain()
   Gl = OpenGLWindow("Z80 emulator - PureBasic, Neon Arcade", w, h,
                     #PB_Window_SystemMenu | #PB_Window_ScreenCentered | #PB_Window_SizeGadget | #PB_Window_MinimizeGadget | #PB_Window_MaximizeGadget)
   Win = Util_MainWindowID
-  s = DisplayScale()
-  Neon_UIScale = s
-  *Neon_FontUI = Neon_CreateFontPx("Segoe UI", Round(14 * s, #PB_Round_Nearest))
-  *Neon_FontSmall = Neon_CreateFontPx("Segoe UI", Round(12 * s, #PB_Round_Nearest))
-  *Neon_FontBold = Neon_CreateFontPx("Segoe UI", Round(15 * s, #PB_Round_Nearest), #PB_Font_Bold)
-  *Neon_FontMono = Neon_CreateFontPx("Consolas", Round(14 * s, #PB_Round_Nearest))
-  GLFontSetSnapToPixel(*Neon_FontUI, #True)
-  GLFontSetSnapToPixel(*Neon_FontSmall, #True)
-  GLFontSetSnapToPixel(*Neon_FontBold, #True)
-  GLFontSetSnapToPixel(*Neon_FontMono, #True)
+  BuildFonts(DisplayScale())
   RateWindowStart = ElapsedMilliseconds()
   Repeat
     Repeat
@@ -511,6 +726,12 @@ Procedure WindowMain()
     Until ev = 0
     Frame()
     If ShotFrames < 0 : quit = 1 : EndIf
+    If PtDone
+      PtSay("pointer test: checks=" + Str(PtChecks) + " failures=" + Str(PtFails) + StringField(" PASS| FAIL", Bool(PtFails > 0) + 1, "|"))
+      f = CreateFile(#PB_Any, PtOut$)
+      If f : WriteString(f, PtReport$) : CloseFile(f) : EndIf
+      quit = 1
+    EndIf
     If Running = 0 : Delay(10) : EndIf
   Until quit
 EndProcedure
@@ -528,6 +749,8 @@ For argi = 0 To CountProgramParameters() - 1
     Case "--zexall" : zex = 1
     Case "--screenshot" : argi + 1 : ShotPath$ = ProgramParameter(argi)
     Case "--shot-after" : argi + 1 : ShotAfter = Val(ProgramParameter(argi))
+    Case "--ui-log" : argi + 1 : UiLogPath$ = ProgramParameter(argi)
+    Case "--pointer-test" : argi + 1 : PtOut$ = ProgramParameter(argi) : PtTest = 1
     Default
       If LoadProgram(arg$)
         Status$ = "Loaded " + LoadedName$ + " (" + Str(LoadedSize) + " bytes)."
