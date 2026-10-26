@@ -288,6 +288,30 @@ one go. It finds the engine beside the repository (or at `NEON_ENGINE_DIR`) and
 builds ZEXDOC/ZEXALL in by itself once they are fetched. The full guide is in
 `desktop/README.md`.
 
+### Controls
+
+The emulated machine takes no keys: its CP/M console only writes (BDOS 2 and
+9), and there is no gamepad input. Every key belongs to the window. They are
+all in one table, `desktop/controls.pbi`, which the window's key handling and
+its **Controls** tab (in the Output panel) both read:
+
+| Key | What it does |
+|---|---|
+| F11 | full screen on / off (also the toolbar's **Full screen** button) |
+| Esc | leave full screen |
+
+| Mouse | What it does |
+|---|---|
+| click a disassembly row | set or clear the breakpoint there |
+| wheel | scroll the pane under the pointer |
+
+**Full screen** is a borderless window over the monitor the window is on, with
+no display-mode change. It shows only the machine's screen: the CP/M console
+as an 80 x 24 terminal at a 4:3 tube's shape, centred on black. The machine
+runs on unchanged, and the pointer hides after two idle seconds. Leaving puts
+the window back exactly where it was, at the same size. No machine key is
+given up for Esc, because the console has no keyboard input.
+
 ## Known limits
 
 - IM 0 runs RST bus bytes only. Any other byte stops the CPU with

@@ -35,7 +35,28 @@ Define `#Z80_TIMED`, `#Z80_SHARED_TAIL`, `#Z80_MEM_HOOKS`, `#Z80_Q` and
 | `z80_console_procs*.exe` | the procedure-table core, kept only for the dispatch measurement |
 
 Window options: `--show-tests`, `--zexdoc`, `--zexall`, `--run`,
-`--screenshot <png>` with `--shot-after <frames>` (0 = when the program stops).
+`--screenshot <png>` with `--shot-after <frames>` (0 = when the program stops),
+`--output-tab <n>` (0 console, 1 test results, 2 Controls).
+
+### Controls and full screen
+
+The keys are in one table, `controls.pbi`: **F11** toggles full screen (as the
+toolbar's Full screen button does) and **Esc** leaves it. The machine takes no
+keys, so Esc is the window's. The Controls tab in the Output panel lists the
+table; the repository README has it too.
+
+Full screen is a borderless window over the window's own monitor. It shows the
+CP/M console only, as an 80 x 24 terminal at 4:3, centred on black, while the
+machine runs on.
+`z80_desktop.exe --fullscreen-test <report.txt> [--fullscreen-shot <png>]`
+checks it without the real pointer: it posts F11 and Esc to the window, with a
+small program printing and counting. At 125% on a 1920 x 1080 monitor: 13
+checks, 0 failures. The window covers the monitor, the terminal is 1440 x 1080
+at 240,0, the machine runs on, and the windowed rectangle and style come back
+exactly.
+
+![Full screen](../docs/desktop-fullscreen.png)
+![The Controls tab](../docs/desktop-controls.png)
 
 ### Pointer and display scale
 
@@ -50,7 +71,8 @@ pointer). Two checks prove it at whatever scale the desktop is set to:
   button, the Break-at field, every tab, both scroll bars, the disassembly
   rows) it hovers all four inner corners and a point just outside, then
   clicks at the bottom-right corner and checks the control did its job, then
-  closes. At 125%: 155 checks, 0 failures.
+  closes. It includes the Controls tab and the Full screen button, so run it
+  while holding the desktop lease. At 125%: 167 checks, 0 failures.
 - `tools\ui_check.ps1 [-Shot <png>]` moves the real pointer, without
   clicking, over controls at the top, middle, bottom and right of the window
   and checks the window reads the same point under the same control. It holds
