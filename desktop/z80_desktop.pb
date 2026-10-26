@@ -72,7 +72,7 @@ Structure UiBox
 EndStructure
 Global NewMap UiBoxes.UiBox()
 Global PtTest.i, PtOut$, PtStep.i, PtFrame.i, PtX.f, PtY.f, PtDown.i, PtDone.i
-Global PtWarm.i, PtChecks.i, PtFails.i, PtReport$, PtOpened.i, PtPc.i, PtMemTop.i, PtKey$, PtClick.i
+Global PtWarm.i, PtChecks.i, PtFails.i, PtReport$, PtOpened.i, PtPc.i, PtMemTop.i, PtKey$, PtClick.i, PtStatus$
 Global NewList PtSteps.s()
 
 Procedure UiRect(name.s, x.f, y.f, w.f, h.f)
@@ -523,7 +523,11 @@ Procedure.s PtExpect(act.s)
         ProcedureReturn "running=" + Str(Running) + " " + Status$
       EndIf
     Case "stopifrunning", "stopped" : If Running : ProcedureReturn "still running" : EndIf
-    Case "running"  : If Running = 0 : ProcedureReturn "did not run: " + Status$ : EndIf
+    Case "running"
+      ; with nothing loaded the machine runs into the warm-boot HALT at once
+      If Running = 0 And (Status$ = PtStatus$ Or FindString(Status$, "ended") = 0)
+        ProcedureReturn "did not run: " + Status$
+      EndIf
   EndSelect
   ProcedureReturn ""
 EndProcedure
@@ -574,7 +578,7 @@ Procedure PtDrive()
       EndIf
     EndIf
     PtX = x : PtY = y : PtDown = 0
-    If PtFrame = 10 And PtClick : PtDown = 1 : PtPc = Z80PC : PtMemTop = MemTop : PtOpened = 0 : EndIf
+    If PtFrame = 10 And PtClick : PtDown = 1 : PtPc = Z80PC : PtMemTop = MemTop : PtOpened = 0 : PtStatus$ = Status$ : EndIf
     If PtFrame = 10 And PtClick = 0 : PtFrame = 99 : EndIf
   EndIf
   If PtFrame = 15
