@@ -2,7 +2,7 @@
 
 A fast, complete **Zilog Z80** CPU core for the **Raspberry Pi Pico W (RP2040)**
 and **Pico 2 W (RP2350)**, written in **PureMetal**, with the same core on the
-desktop (Windows, PureBasic) behind a debugger window. It runs every documented
+desktop (Windows and Linux, PureBasic) behind a debugger window. It runs every documented
 and undocumented instruction with exact flags and T-state counts, passes
 ZEXDOC, ZEXALL and 8,020 SingleStepTests vectors **on the boards themselves**,
 and runs 2.6–6.6 million Z80 instructions per second on a Pico, which is
@@ -239,8 +239,15 @@ assembler listings, in `docs/*-dispatch-disassembly.txt`
 ## The desktop version
 
 `desktop/` has the same core, generated from the same handlers by
-`tools/gen_z80_desktop.py`, as a Windows program in PureBasic (C back end,
-x64), drawn with the Neon Arcade Display Engine:
+`tools/gen_z80_desktop.py`, as a Windows and Linux program in PureBasic (C
+back end, x64), drawn with the Neon Arcade Display Engine. One source builds
+on both:
+
+- **Windows:** `.\desktop\build.ps1` (from PowerShell)
+- **Linux:** `export PUREBASIC_HOME=~/purebasic641/purebasic`, then
+  `sh desktop/build.sh`
+
+What it has:
 
 - **The window:** a CP/M-style machine (`.COM` at 100h). It shows registers
   and flags, a disassembly with click-to-break, memory, and the CP/M console.
@@ -286,7 +293,7 @@ py -3 Z80EmulatorPicoSeries\tools\fetch_zex.py
 (`z80_console.exe --test | --quick | --bench | --distest | --run <file.com>`) in
 one go. It finds the engine beside the repository (or at `NEON_ENGINE_DIR`) and
 builds ZEXDOC/ZEXALL in by itself once they are fetched. The full guide is in
-`desktop/README.md`.
+`desktop/README.md`, which also has the Linux build (`desktop/build.sh`).
 
 ### Controls
 
