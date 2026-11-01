@@ -952,7 +952,7 @@ Procedure WindowMain()
         ElseIf et = #PB_EventType_LeftButtonUp
           MouseDown = #False
         ElseIf et = #PB_EventType_KeyDown
-          KeyCode = GetGadgetAttribute(Gl, #PB_OpenGL_Key)
+          KeyCode = GL_KeyEventCode(GetGadgetAttribute(Gl, #PB_OpenGL_Key))   ; the same code on both OSes
           OnKey(KeyCode)                          ; F11 (controls.pbi)
         ElseIf et = #PB_EventType_Input
           KeyChar = GetGadgetAttribute(Gl, #PB_OpenGL_Input)
