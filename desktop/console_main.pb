@@ -15,6 +15,13 @@ CompilerEndIf
 #SST_SABOTAGE = 0
 #SST_HOOK_ALL = 0
 EnableExplicit
+; The engine's HOST SERVICES first (the clock, GL_Micros): nothing in the
+; emulator calls the OS, on Windows or Linux.
+CompilerIf Not Defined(GL_ENGINE_DIR$, #PB_Constant)
+  #GL_ENGINE_DIR$ = #PB_Compiler_FilePath + "../../Neon-Arcade-Dispay-Engine/"   ; a clone beside this repository
+CompilerEndIf
+XIncludeFile #GL_ENGINE_DIR$ + "GlTypes.pbi"
+XIncludeFile #GL_ENGINE_DIR$ + "GlUtilities.pbi"
 CompilerIf Not Defined(Z80_PROCS, #PB_Constant)
   #Z80_PROCS = 0
 CompilerEndIf

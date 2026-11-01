@@ -1,4 +1,4 @@
-# Builds the desktop Z80 emulator: z80_desktop.exe (the Neon window), and the
+# Builds the desktop Z80 emulator on Windows: z80_desktop.exe (the Neon window), and the
 # console programs through build_console.ps1 (the suites and benchmarks).
 #   -Compiler  PureBasic's C-back-end compiler (pbcompilerc.exe)
 #   -Engine    the Neon Arcade Display Engine folder (default: NEON_ENGINE_DIR, else a
@@ -15,7 +15,7 @@ if (!(Test-Path (Join-Path $Engine 'GlUIChrome.pbi'))) {
 }
 $Engine = (Resolve-Path $Engine).Path.Replace('\', '/').TrimEnd('/') + '/'
 if (!(Test-Path $Compiler)) { throw "PureBasic's pbcompilerc.exe is not at ${Compiler}: pass -Compiler." }
-& (Join-Path $here 'build_console.ps1') -Compiler $Compiler
+& (Join-Path $here 'build_console.ps1') -Compiler $Compiler -Engine $Engine
 $exe = Join-Path $here 'z80_desktop.exe'
 $zex = if (Test-Path (Join-Path $here '..\tests\zex_data.pico')) { '1' } else { '0' }
 & $Compiler (Join-Path $here 'z80_desktop.pb') /EXE $exe /THREAD /DPIAWARE /OPTIMIZER /CONSTANT "GL_ENGINE_DIR$=$Engine" /CONSTANT "Z80_HAVE_ZEX=$zex"

@@ -1,8 +1,11 @@
 # Z80 on the desktop — PureBasic + Neon Arcade Display Engine
 
-The Pico's Z80 core, on Windows: a PureBasic (C back end, x64) program with a
-Neon Arcade Display Engine front end, and console programs that run the
-board's own test suites and benchmarks.
+The Pico's Z80 core, on Windows and Linux from one source: a PureBasic (C back
+end, x64) program with a Neon Arcade Display Engine front end, and console
+programs that run the board's own test suites and benchmarks. Nothing here
+calls the OS: the window, drawing, input, full screen, the pointer, the client
+size, the work area and the clock all come through the engine (its HOST
+SERVICES in `GlUtilities.pbi`), which has the Windows and the Linux branch.
 
 ## Same core, same API
 
@@ -49,11 +52,11 @@ Full screen is a borderless window over the window's own monitor. It shows the
 CP/M console only, as an 80 x 24 terminal at 4:3, centred on black, while the
 machine runs on.
 `z80_desktop.exe --fullscreen-test <report.txt> [--fullscreen-shot <png>]`
-checks it without the real pointer: it posts F11 and Esc to the window, with a
-small program printing and counting. At 125% on a 1920 x 1080 monitor: 13
-checks, 0 failures. The window covers the monitor, the terminal is 1440 x 1080
-at 240,0, the machine runs on, and the windowed rectangle and style come back
-exactly.
+checks it without the real pointer: F11 and Esc go into the window's key
+handler (where a real press arrives), with a small program printing and
+counting. At 150% on a 2560 x 1600 monitor: 12 checks, 0 failures. The window
+covers the monitor, the terminal is 2133 x 1600 at 213,0, the machine runs on,
+and the windowed rectangle and client size come back exactly.
 
 ![Full screen](../docs/desktop-fullscreen.png)
 ![The Controls tab](../docs/desktop-controls.png)
@@ -72,7 +75,7 @@ pointer). Two checks prove it at whatever scale the desktop is set to:
   rows) it hovers all four inner corners and a point just outside, then
   clicks at the bottom-right corner and checks the control did its job, then
   closes. It includes the Controls tab and the Full screen button, so run it
-  while holding the desktop lease. At 125%: 167 checks, 0 failures.
+  while holding the desktop lease. At 150%: 165 checks, 0 failures.
 - `tools\ui_check.ps1 [-Shot <png>]` moves the real pointer, without
   clicking, over controls at the top, middle, bottom and right of the window
   and checks the window reads the same point under the same control. It holds
@@ -89,9 +92,38 @@ side by side, then from the folder that holds both (PureBasic 6.41+, x64, C back
 ```
 
 or, for the window and all console programs, `.\desktop\build.ps1` from
-PowerShell (not Git Bash, which mangles `/CONSOLE`). ZEXDOC/ZEXALL are optional:
+PowerShell (not Git Bash, which mangles `/CONSOLE`); `-Compiler` names
+`pbcompilerc.exe` if it is not under `C:\Program Files\PureBasic`, `-Engine`
+(or `NEON_ENGINE_DIR`) the engine if it is not beside this repository.
+
+On Linux (x64, PureBasic 6.41+ for Linux, GTK3, with the GL, X11 and ALSA
+libraries the engine links), the same two clones side by side:
+
+```sh
+export PUREBASIC_HOME=~/purebasic641/purebasic   # your PureBasic for Linux
+sh Z80EmulatorPicoSeries/desktop/build.sh
+```
+
+It builds `z80_desktop` and the four console programs (no `.exe`) with the C
+back end (`pbcompilerc -t -z`, `-cl` for the console ones). Under WSL, build
+from the Linux file system, not `/mnt/c`: there the compiler can include a file
+twice. Run `./z80_desktop` and `./z80_console --test` as on Windows; the
+options are the same. Keys are `#PB_Shortcut_` codes (X keysyms on Linux), so
+`controls.pbi` means the same keys on both. ZEXDOC/ZEXALL are optional:
 without `py -3 tools/fetch_zex.py` everything builds and says they are not
 fetched; after it, `build.ps1` builds them in (or add `/CONSTANT Z80_HAVE_ZEX=1`).
+
+### Linux
+
+Under WSL (Ubuntu, PureBasic 6.41 Linux) everything builds, and the console
+suites give the same counts as Windows: SST 8,020 vectors 0 failures, API 19
+of 19 (timed) and 18 of 18 (untimed), the procedure-table core the same, the
+disassembler 40 of 40. **Not proven yet: the window on Linux.** Under WSLg,
+PureBasic's own `OpenGLGadget` fails as it is created (`GLXBadContextTag`),
+even in a program with nothing but a window and the gadget, so the window
+cannot be opened there; it needs a Linux desktop or an X server with direct
+GLX (Xvfb). The machine has no sound and takes no gamepad, so there is no ALSA
+or pad path to prove.
 
 ## Results (i9-11900K, Windows, `/OPTIMIZER`)
 

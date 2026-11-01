@@ -1,13 +1,12 @@
 ; The board programs' output helpers (tests/io.pico), for the desktop: the
 ; same names, writing to a log the window shows and, in a console build, to
-; the console. USB servicing and the watchdog do not exist here.
-Global IoLine$, IoLog$, IoConsole.i, IoQpcFreq.q
+; the console. USB servicing and the watchdog do not exist here. The clock is
+; the Neon Arcade Display Engine's (GL_Micros in GlUtilities.pbi, which both
+; programs include first), so nothing here calls the OS.
+Global IoLine$, IoLog$, IoConsole.i
 
 Procedure.q Micros()
-  Protected c.q
-  If IoQpcFreq = 0 : QueryPerformanceFrequency_(@IoQpcFreq) : EndIf
-  QueryPerformanceCounter_(@c)
-  ProcedureReturn (c / IoQpcFreq) * 1000000 + ((c % IoQpcFreq) * 1000000) / IoQpcFreq
+  ProcedureReturn GL_Micros()
 EndProcedure
 Procedure IoFlushLine()
   IoLog$ + IoLine$ + #LF$

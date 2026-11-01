@@ -10,7 +10,7 @@
 
 Structure CtlBinding
   action.i      ; #CTL_*
-  key.i         ; the Windows virtual-key code (also PureBasic's #PB_Shortcut_* value)
+  key.i         ; a #PB_Shortcut_ code (the virtual-key code on Windows, the X keysym on Linux)
   key$          ; the key as the window shows it
   what$         ; what it does
 EndStructure
@@ -50,7 +50,7 @@ EndProcedure
 DataSection
   CtlKeyTable:
   ; action, key, key as shown, what it does
-  Data.i #CTL_FULLSCREEN, #VK_F11 : Data.s "F11", "full screen on / off"
-  Data.i #CTL_LEAVEFULL, #VK_ESCAPE : Data.s "Esc", "leave full screen"
+  Data.i #CTL_FULLSCREEN, #PB_Shortcut_F11 : Data.s "F11", "full screen on / off"
+  Data.i #CTL_LEAVEFULL, #PB_Shortcut_Escape : Data.s "Esc", "leave full screen"
   Data.i -1
 EndDataSection
