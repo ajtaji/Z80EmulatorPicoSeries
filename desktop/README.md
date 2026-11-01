@@ -118,12 +118,15 @@ fetched; after it, `build.ps1` builds them in (or add `/CONSTANT Z80_HAVE_ZEX=1`
 Under WSL (Ubuntu, PureBasic 6.41 Linux) everything builds, and the console
 suites give the same counts as Windows: SST 8,020 vectors 0 failures, API 19
 of 19 (timed) and 18 of 18 (untimed), the procedure-table core the same, the
-disassembler 40 of 40. **Not proven yet: the window on Linux.** Under WSLg,
-PureBasic's own `OpenGLGadget` fails as it is created (`GLXBadContextTag`),
-even in a program with nothing but a window and the gadget, so the window
-cannot be opened there; it needs a Linux desktop or an X server with direct
-GLX (Xvfb). The machine has no sound and takes no gamepad, so there is no ALSA
-or pad path to prove.
+disassembler 40 of 40. The window (WSLg, scale 1.0, 2560 x 1600 monitor):
+`--fullscreen-test` 12 checks, 0 failures; `--pointer-test` 165 checks, 0
+failures; `--show-tests` draws the same picture as on Windows. Real X input
+(XTest, sent only while the window held the focus): a click puts the focus in
+Break at, typing `1234` and Enter sets the breakpoint to 4660, F11 takes the
+window to 2560 x 1600 and Esc brings it back to 1440 x 900. The engine needs
+d95f596 + 061f525 or later: before 061f525 no PureBasic OpenGL gadget could be
+created under WSLg (`GLXBadContextTag`). The machine has no sound and takes no
+gamepad, so there is no ALSA or pad path to prove.
 
 ## Results (i9-11900K, Windows, `/OPTIMIZER`)
 

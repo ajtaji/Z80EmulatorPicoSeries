@@ -934,6 +934,7 @@ Procedure WindowMain()
                     #PB_Window_SystemMenu | #PB_Window_ScreenCentered | #PB_Window_SizeGadget | #PB_Window_MinimizeGadget | #PB_Window_MaximizeGadget)
   Win = Util_MainWindowID
   GL_HostScaleRead(Gl)                            ; (the engine's: Linux_DPIScale on Linux)
+  SetActiveGadget(Gl)                             ; GTK gives the gadget no key events until it has the focus
   BuildFonts(DisplayScale())
   RateWindowStart = ElapsedMilliseconds()
   Repeat
